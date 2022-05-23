@@ -138,7 +138,7 @@ namespace BackPfe.Controllers
         [HttpGet("client/{id}")]
         public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetClientDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string arrive ,int id)
         {
-            var demandeLivraison =  _context.DemandeLivraison.Where(t=>t.IdclientNavigation.Iduser==id).Include(t=>t.IdEtatdemandeNavigation).AsQueryable();
+            var demandeLivraison =  _context.DemandeLivraison.Where(t=>t.IdclientNavigation.Iduser==id).Include(t=>t.IdEtatdemandeNavigation).Include(t=>t.Offre).AsQueryable();
             if (!string.IsNullOrEmpty(depart) && string.IsNullOrEmpty(arrive))
             {
                 demandeLivraison = demandeLivraison.Where(t => t.Adressdepart.Contains(depart));

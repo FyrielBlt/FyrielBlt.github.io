@@ -28,17 +28,29 @@ namespace BackPfe.Controllers
         }
 
         // GET: api/EtatDemandeLivraisons/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EtatDemandeLivraison>> GetEtatDemandeLivraison(int id)
+        [HttpGet("check")]
+        public async Task<ActionResult<EtatDemandeLivraison>> GetEtatDemandeLivraison([FromQuery] string etat)
         {
-            var etatDemandeLivraison = await _context.EtatDemandeLivraison.FindAsync(id);
-
-            if (etatDemandeLivraison == null)
+            EtatDemandeLivraison etats = new EtatDemandeLivraison();
+            if (etat == "Accepte")
             {
-                return NotFound();
+                etats = await _context.EtatDemandeLivraison.Where(t => t.EtatDemande == "Accepté").FirstAsync();
+            }
+            if (etat == "Encours")
+            {
+                etats = await _context.EtatDemandeLivraison.Where(t => t.EtatDemande == "En cours de traitement").FirstAsync();
+            }
+            if (etat == "Refuse")
+            {
+                etats = await _context.EtatDemandeLivraison.Where(t => t.EtatDemande == "Refusé").FirstAsync();
+            }
+            if (etat == "livre")
+            {
+                etats = await _context.EtatDemandeLivraison.Where(t => t.EtatDemande == "Livré").FirstAsync();
             }
 
-            return etatDemandeLivraison;
+
+            return etats;
         }
 
         // PUT: api/EtatDemandeLivraisons/5

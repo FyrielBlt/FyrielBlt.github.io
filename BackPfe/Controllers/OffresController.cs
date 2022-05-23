@@ -211,7 +211,7 @@ namespace BackPfe.Controllers
                 }
             }
             {
-                using (MailMessage mail = new MailMessage())
+               /* using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress("beltaiefferiel98@gmail.com");
                     mail.To.Add("ferielcontact.email@gmail.com");
@@ -219,14 +219,14 @@ namespace BackPfe.Controllers
                     mail.Body = "Bonjour , une offre a été envoyer, Notez bien si vous ne répondrez pas dans le bien délai " +
                         "l'offre sera réjuter ";
                     mail.IsBodyHtml = true;
-                    using (SmtpClient stmp = new SmtpClient("smtp.gmail.com", 587))
+                    using (SmtpClient stmp = new SmtpClient("smtp.mailtrap.io", 2525))
                     {
-                        stmp.Credentials = new System.Net.NetworkCredential("beltaiefferiel98@gmail.com", "ferielsansa01052018*0");
+                        stmp.Credentials = new System.Net.NetworkCredential("9fd3fb2f9c2ff4", "39a7a0d5ed76fd");
                         stmp.EnableSsl = true;
                         stmp.Send(mail);
                     }
 
-                }
+                }*/
 
             }
 
@@ -241,22 +241,23 @@ namespace BackPfe.Controllers
         {
             _context.Offre.Add(offre);
             await _context.SaveChangesAsync();
-           
-            using (MailMessage mail = new MailMessage())
+
+           /* using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress("beltaiefferiel98@gmail.com");
-                mail.To.Add("malek@gmail.com");
-                mail.Subject = "Une réponse a votre demande a été envoyer";
-                mail.Body = "Bonjour , une offre est disponible";
+                mail.To.Add("ferielcontact.email@gmail.com");
+                mail.Subject = "Une modification sur l'offre";
+                mail.Body = "Bonjour , une offre a été envoyer, Notez bien si vous ne répondrez pas dans le bien délai " +
+                    "l'offre sera réjuter ";
                 mail.IsBodyHtml = true;
-                using (SmtpClient stmp = new SmtpClient("smtp.gmail.com", 587))
+                using (SmtpClient stmp = new SmtpClient("smtp.mailtrap.io", 2525))
                 {
-                    stmp.Credentials = new System.Net.NetworkCredential("beltaiefferiel98@gmail.com", "ferielsansa01052018*0");
+                    stmp.Credentials = new System.Net.NetworkCredential("9fd3fb2f9c2ff4", "39a7a0d5ed76fd");
                     stmp.EnableSsl = true;
                     stmp.Send(mail);
                 }
 
-            }
+            }*/
             return CreatedAtAction("GetOffre", new { id = offre.IdOffre }, offre);
         }
 

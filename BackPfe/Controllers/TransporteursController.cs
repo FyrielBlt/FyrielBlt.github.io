@@ -74,7 +74,7 @@ namespace BackPfe.Controllers
           /*  var transporteur = _context.Transporteur.Where(el => el.IdTransporteur == id)
                 .Include(el => el.IdUserNavigation)
                 .First(); ;*/
-            var queryable = _context.Transporteur
+            var queryable = _context.Transporteur.Where(el => el.IdTransporteur == id)
            .Select(x => new Transporteur()
            {
                IdTransporteur = x.IdTransporteur,

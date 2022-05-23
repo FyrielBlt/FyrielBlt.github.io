@@ -36,12 +36,22 @@ namespace BackPfe.Controllers
             {
                 offres = await _context.EtatOffre.Where(t => t.Etat == "Accepté").FirstAsync();
             }
-
+            if (offre == "Encours")
+            {
+                offres = await _context.EtatOffre.Where(t => t.Etat == "En cours de traitement").FirstAsync();
+            }
             if (offre == "Nontraite")
             {
                 offres = await _context.EtatOffre.Where(t => t.Etat == "Non traité").FirstAsync();
             }
-
+            if (offre == "attente")
+            {
+                offres = await _context.EtatOffre.Where(t => t.Etat == "En attente d'acceptation").FirstAsync();
+            }
+            if (offre == "livre")
+            {
+                offres = await _context.EtatOffre.Where(t => t.Etat == "Livré").FirstAsync();
+            }
 
 
             return offres;
