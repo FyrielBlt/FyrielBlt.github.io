@@ -16,8 +16,6 @@ namespace BackPfe.Models
         public int IdDemandeLivraison { get; set; }
         public string FactureFile { get; set; }
         public string PayementFile { get; set; }
-       
-
         public int? Notification { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
@@ -25,6 +23,7 @@ namespace BackPfe.Models
         public string SrcFactureFile { get; set; }
         [NotMapped]
         public string SrcPayementFile { get; set; }
+
 
         public virtual DemandeLivraison IdDemandeLivraisonNavigation { get; set; }
     }

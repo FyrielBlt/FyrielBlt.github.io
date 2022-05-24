@@ -34,7 +34,6 @@ namespace BackPfe.Models
         public virtual DbSet<FileOffre> FileOffre { get; set; }
         public virtual DbSet<Intermediaire> Intermediaire { get; set; }
         public virtual DbSet<Itineraire> Itineraire { get; set; }
-
         public virtual DbSet<Offre> Offre { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Role> Role { get; set; }

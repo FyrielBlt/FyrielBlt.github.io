@@ -25,7 +25,6 @@ namespace BackPfe.Models
         [NotMapped]
         public string ImageSrc { get; set; }
 
-
         public virtual Users IduserNavigation { get; set; }
         public virtual ICollection<Camion> Camion { get; set; }
     }

@@ -269,7 +269,9 @@ namespace BackPfe.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Offre>> DeleteOffre(int id)
         {
-            var offre = await _context.Offre.FindAsync(id);
+            var offre = await _context.Offre.
+                
+                FindAsync(id);
             if (offre == null)
             {
                 return NotFound();
