@@ -33,6 +33,8 @@ namespace BackPfe.Models
         public virtual DbSet<FileFactureTransporteur> FileFactureTransporteur { get; set; }
         public virtual DbSet<FileOffre> FileOffre { get; set; }
         public virtual DbSet<Intermediaire> Intermediaire { get; set; }
+        public virtual DbSet<Itineraire> Itineraire { get; set; }
+
         public virtual DbSet<Offre> Offre { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -48,6 +50,7 @@ namespace BackPfe.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BasePfe;Trusted_Connection=True;");
             }
         }
@@ -311,6 +314,12 @@ namespace BackPfe.Models
                     .WithMany(p => p.Intermediaire)
                     .HasForeignKey(d => d.IdUser)
                     .HasConstraintName("FK_Intermediaire_Users");
+            });
+
+            modelBuilder.Entity<Itineraire>(entity =>
+            {
+                entity.HasKey(e => e.IdItineraire)
+                    .HasName("PK_Itineraire2");
             });
 
             modelBuilder.Entity<Offre>(entity =>

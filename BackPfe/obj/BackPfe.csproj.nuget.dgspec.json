@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\BACK\\backpfe\\BackPfe.csproj": {}
+    "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\BACK\\backpfe\\BackPfe.csproj": {
+    "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\BACK\\backpfe\\BackPfe.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
         "projectName": "BackPfe",
-        "projectPath": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\BACK\\backpfe\\BackPfe.csproj",
-        "packagesPath": "C:\\Users\\Karim Omrane\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\BACK\\backpfe\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Karim Omrane\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -109,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.105\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -20,8 +20,8 @@ namespace BackPfe.Models
         public string EtatFacture { get; set; }
         public int IdOffre { get; set; }
         public string FactureFile { get; set; }
-        
         public string PayementFile { get; set; }
+        public int? Notification { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
         [NotMapped]

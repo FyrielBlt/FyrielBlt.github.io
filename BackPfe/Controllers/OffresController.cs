@@ -26,7 +26,10 @@ namespace BackPfe.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Offre>>> GetOffre()
         {
-            return await _context.Offre.ToListAsync();
+            return await _context.Offre.
+                                Include(t => t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis).
+
+                ToListAsync();
         }
 
         // GET: api/Offres/5
@@ -75,7 +78,7 @@ namespace BackPfe.Controllers
 
             var offre =  _context.Offre.Where(t => t.IdTransporteur == id)
                 .Include(t => t.IdEtatNavigation)
-                .Include(t=>t.IdDemandeNavigation)
+                .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(arrive))
             {
@@ -258,7 +261,8 @@ namespace BackPfe.Controllers
                 }
 
             }*/
-            return CreatedAtAction("GetOffre", new { id = offre.IdOffre }, offre);
+            return CreatedAtAction("GetOffre", new { id = offre.IdOffre,
+            }, offre);
         }
 
         // DELETE: api/Offres/5

@@ -28,6 +28,7 @@ namespace BackPfe.Models
         public int Poids { get; set; }
         public int Largeur { get; set; }
         public int Hauteur { get; set; }
+        public int? Notification { get; set; }
 
         public virtual EtatDemandeLivraison IdEtatdemandeNavigation { get; set; }
         public virtual Client IdclientNavigation { get; set; }
