@@ -24,10 +24,11 @@ namespace BackPfe.Models
         public string Adressarrive { get; set; }
         public int IdEtatdemande { get; set; }
         public int Idclient { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public int Poids { get; set; }
         public int Largeur { get; set; }
         public int Hauteur { get; set; }
+        public int? Notification { get; set; }
 
         public virtual EtatDemandeLivraison IdEtatdemandeNavigation { get; set; }
         public virtual Client IdclientNavigation { get; set; }

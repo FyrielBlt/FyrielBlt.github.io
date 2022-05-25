@@ -90,7 +90,7 @@ namespace BackPfe.Controllers
                 .Include(t=>t.IdEtatNavigation)
                 .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.FileDemandeLivraison)
 
-
+                .OrderBy(s => s.DateEnvoit)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(search))
             {
@@ -116,7 +116,7 @@ namespace BackPfe.Controllers
             if (!string.IsNullOrEmpty(date))
             {
                 demandeDevis = demandeDevis.Where(s =>
-                 (s.IdDemandeNavigation.Date).ToString().Contains(date)
+                 s.IdDemandeNavigation.Date.ToString().Contains(date)
 
                 );
             }

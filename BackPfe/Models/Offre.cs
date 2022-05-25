@@ -23,8 +23,11 @@ namespace BackPfe.Models
         public int? PrixFinale { get; set; }
         public int IdTransporteur { get; set; }
         public int IdDemande { get; set; }
-        public TimeSpan? Heurdepart { get; set; }
-        public int? IdCamion { get; set; }
+        public TimeSpan? Heurearrive { get; set; }
+        public int? NotificationIntermediaire { get; set; }
+        public int? NotificationClient { get; set; }
+        public int? NotificationTransporteur { get; set; }
+        public DateTime? Datecreation { get; set; }
 
         public virtual DemandeLivraison IdDemandeNavigation { get; set; }
         public virtual EtatOffre IdEtatNavigation { get; set; }

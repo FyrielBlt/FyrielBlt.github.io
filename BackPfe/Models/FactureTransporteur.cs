@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -20,8 +20,8 @@ namespace BackPfe.Models
         public string EtatFacture { get; set; }
         public int IdOffre { get; set; }
         public string FactureFile { get; set; }
-        
         public string PayementFile { get; set; }
+        public int? Notification { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
         [NotMapped]

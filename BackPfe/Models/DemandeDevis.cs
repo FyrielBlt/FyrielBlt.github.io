@@ -15,6 +15,7 @@ namespace BackPfe.Models
         public int IdDemande { get; set; }
         public int IdTransporteur { get; set; }
         public int IdEtat { get; set; }
+        public int? Notification { get; set; }
 
         public virtual DemandeLivraison IdDemandeNavigation { get; set; }
         public virtual EtatDemandeDevis IdEtatNavigation { get; set; }

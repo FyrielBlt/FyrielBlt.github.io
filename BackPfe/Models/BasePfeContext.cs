@@ -33,6 +33,7 @@ namespace BackPfe.Models
         public virtual DbSet<FileFactureTransporteur> FileFactureTransporteur { get; set; }
         public virtual DbSet<FileOffre> FileOffre { get; set; }
         public virtual DbSet<Intermediaire> Intermediaire { get; set; }
+        public virtual DbSet<Itineraire> Itineraire { get; set; }
         public virtual DbSet<Offre> Offre { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -48,6 +49,7 @@ namespace BackPfe.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BasePfe;Trusted_Connection=True;");
             }
         }
@@ -147,7 +149,7 @@ namespace BackPfe.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
+                entity.Property(e => e.Date).HasColumnType("date");
 
                 entity.Property(e => e.Datecreation).HasColumnType("date");
 
@@ -313,6 +315,17 @@ namespace BackPfe.Models
                     .HasConstraintName("FK_Intermediaire_Users");
             });
 
+            modelBuilder.Entity<Itineraire>(entity =>
+            {
+                entity.HasKey(e => e.IdItineraire)
+                    .HasName("PK_Itineraire2");
+
+                entity.HasOne(d => d.IdTransporteurNavigation)
+                    .WithMany(p => p.Itineraire)
+                    .HasForeignKey(d => d.IdTransporteur)
+                    .HasConstraintName("FK_Itineraire_Transporteur");
+            });
+
             modelBuilder.Entity<Offre>(entity =>
             {
                 entity.HasKey(e => e.IdOffre)
@@ -321,6 +334,8 @@ namespace BackPfe.Models
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
                     .HasColumnType("date");
+
+                entity.Property(e => e.Datecreation).HasColumnType("date");
 
                 entity.Property(e => e.Description)
                     .IsRequired()
