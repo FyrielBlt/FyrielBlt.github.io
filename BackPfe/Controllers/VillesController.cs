@@ -26,7 +26,7 @@ namespace BackPfe.Controllers
         public async Task<ActionResult<IEnumerable<Ville>>> GetVille([FromQuery] Paginations pagination, [FromQuery] string ville)
         {
             var queryable = _context.Ville
-             
+
               .AsQueryable();
 
             if (!string.IsNullOrEmpty(ville))
@@ -55,8 +55,28 @@ namespace BackPfe.Controllers
 
             return ville;
         }
-        //villebyname
-        [HttpGet("{ville}/ville")]
+        [HttpGet("{id}/transporteur")]
+        public async Task<ActionResult<IEnumerable<Ville>>> GetVilleshown(int id)
+        {
+            var itineraires = _context.Itineraire.Where(t => t.IdTransporteur == id).ToList();
+            var villes = _context.Ville.AsQueryable();
+
+                foreach(Itineraire i in itineraires)
+            {
+                villes = villes.Where(t => t.IdVille != i.IdVille);
+            }
+;           
+
+            if (villes == null)
+            {
+                return NotFound();
+            }
+
+            return villes.ToList();
+        }
+       
+    //villebyname
+    [HttpGet("{ville}/ville")]
 
         public async Task<ActionResult<Ville>> GetVillebyname(string ville)
         {

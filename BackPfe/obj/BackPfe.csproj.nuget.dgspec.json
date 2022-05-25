@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj": {}
+    "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj": {
+    "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj",
         "projectName": "BackPfe",
-        "projectPath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
+        "projectPath": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\obj\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -58,7 +58,7 @@
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[3.1.24, )"
+              "version": "[3.1.25, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
@@ -68,7 +68,7 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.24, )"
+              "version": "[3.1.25, )"
             },
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",

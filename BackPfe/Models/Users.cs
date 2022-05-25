@@ -31,8 +31,6 @@ namespace BackPfe.Models
         [NotMapped]
         public string ImageSrc { get; set; }
 
-
-
         public virtual Societe SocieteNavigation { get; set; }
         public virtual ICollection<Chauffeur> Chauffeur { get; set; }
         public virtual ICollection<Client> Client { get; set; }
