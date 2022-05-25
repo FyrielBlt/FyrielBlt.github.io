@@ -149,7 +149,7 @@ namespace BackPfe.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
+                entity.Property(e => e.Date).HasColumnType("date");
 
                 entity.Property(e => e.Datecreation).HasColumnType("date");
 
@@ -319,6 +319,11 @@ namespace BackPfe.Models
             {
                 entity.HasKey(e => e.IdItineraire)
                     .HasName("PK_Itineraire2");
+
+                entity.HasOne(d => d.IdTransporteurNavigation)
+                    .WithMany(p => p.Itineraire)
+                    .HasForeignKey(d => d.IdTransporteur)
+                    .HasConstraintName("FK_Itineraire_Transporteur");
             });
 
             modelBuilder.Entity<Offre>(entity =>
@@ -329,6 +334,8 @@ namespace BackPfe.Models
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
                     .HasColumnType("date");
+
+                entity.Property(e => e.Datecreation).HasColumnType("date");
 
                 entity.Property(e => e.Description)
                     .IsRequired()

@@ -12,5 +12,7 @@ namespace BackPfe.Models
         public int IdItineraire { get; set; }
         public int IdTransporteur { get; set; }
         public int IdVille { get; set; }
+
+        public virtual Transporteur IdTransporteurNavigation { get; set; }
     }
 }

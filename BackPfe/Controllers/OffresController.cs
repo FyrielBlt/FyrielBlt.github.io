@@ -49,22 +49,7 @@ namespace BackPfe.Controllers
                 return offre;
             
         }
-        [HttpGet("{id}/idcamion")]
-        public async Task<ActionResult<IEnumerable<Offre>>> GetOffrebyidtrajet(int id)
-        {
-
-            var offre = await _context.Offre.Where(t => t.IdCamion == id).
-            Include(t => t.IdDemandeNavigation)
-            .Include(t => t.IdEtatNavigation).Include(t => t.IdTransporteurNavigation).ThenInclude(t => t.IdUserNavigation).ToListAsync();
-
-            if (offre == null)
-            {
-                return NotFound();
-            }
-
-            return offre;
-
-        }
+        
         [HttpGet("{id}/offrestransporteur")]
         public async Task<ActionResult<IEnumerable<Offre>>> GetOffrebyidtransporteur(
              [FromQuery] Paginations pagination,
@@ -79,6 +64,8 @@ namespace BackPfe.Controllers
             var offre =  _context.Offre.Where(t => t.IdTransporteur == id)
                 .Include(t => t.IdEtatNavigation)
                 .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis)
+                .OrderByDescending
+               (s => s.Datecreation)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(arrive))
             {
@@ -113,7 +100,7 @@ namespace BackPfe.Controllers
                 if (etat == "Refuse")
                 {
                     offre = offre.Where(s =>
-                    s.IdEtatNavigation.Etat.Contains("Réfusé"));
+                    s.IdEtatNavigation.Etat.Contains("Refusé"));
                 }
                 if (etat == "Non traite")
                 {
@@ -150,7 +137,10 @@ namespace BackPfe.Controllers
         [HttpGet("client/{id}")]
         public async Task<ActionResult<IEnumerable<Offre>>> GetClientOffre([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string arrive, int id)
         {
-            var offre =  _context.Offre.Where(t=>t.IdDemandeNavigation.IdclientNavigation.Iduser==id).Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.IdclientNavigation).ThenInclude(t=>t.IduserNavigation).Include(t => t.IdEtatNavigation).Include(t => t.IdTransporteurNavigation).ThenInclude(t=>t.IdUserNavigation).AsQueryable();
+            var offre =  _context.Offre.Where(t=>t.IdDemandeNavigation.IdclientNavigation.Iduser==id)
+                .Where(t => t.PrixFinale!=null)
+                .OrderByDescending(t=>t.PrixFinale)
+                .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.IdclientNavigation).ThenInclude(t=>t.IduserNavigation).Include(t => t.IdEtatNavigation).Include(t => t.IdTransporteurNavigation).ThenInclude(t=>t.IdUserNavigation).AsQueryable();
             if (!string.IsNullOrEmpty(depart) && string.IsNullOrEmpty(arrive))
             {
                 offre =offre.Where(t=>t.IdDemandeNavigation.Adressdepart.Contains(depart));    
