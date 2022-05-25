@@ -42,7 +42,7 @@ namespace BackPfe.Controllers
             return itineraire;
         }
         [HttpGet("{id}/transporteur")]
-        public async Task<ActionResult<IEnumerable<Itineraire>>> GetItinerairebyidtransporteur([FromQuery]  , [FromQuery] Paginations pagination, int id)
+        public async Task<ActionResult<IEnumerable<Itineraire>>> GetItinerairebyidtransporteur( [FromQuery] Paginations pagination, int id)
         {
             var itineraire =  _context.Itineraire.Where(t => t.IdTransporteur == id).
                 Include(t=>t.IdVilleNavigation).
