@@ -136,21 +136,22 @@ namespace BackPfe.Controllers
         }
         // GET: api/DemandeLivraisons/5
         [HttpGet("client/{id}")]
-        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetClientDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string arrive ,int id)
+        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetClientDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string num, [FromQuery] string arrive ,int id)
         {
             var demandeLivraison =  _context.DemandeLivraison.Where(t=>t.IdclientNavigation.Iduser==id).Include(t=>t.IdEtatdemandeNavigation).Include(t=>t.Offre).AsQueryable();
-            if (!string.IsNullOrEmpty(depart) && string.IsNullOrEmpty(arrive))
+            if (!string.IsNullOrEmpty(depart))
             {
                 demandeLivraison = demandeLivraison.Where(t => t.Adressdepart.Contains(depart));
             }
-            else if (!string.IsNullOrEmpty(arrive) && string.IsNullOrEmpty(depart))
+            if (!string.IsNullOrEmpty(arrive))
             {
                 demandeLivraison = demandeLivraison.Where(t => t.Adressarrive.Contains(arrive));
             }
-            else if (!string.IsNullOrEmpty(depart) && !string.IsNullOrEmpty(arrive))
+            if (!string.IsNullOrEmpty(num))
             {
-                demandeLivraison = demandeLivraison.Where(t => t.Adressarrive.Contains(arrive) && t.Adressdepart.Contains(depart));
+                demandeLivraison = demandeLivraison.Where(t => t.IdDemande.ToString().Contains(num));
             }
+
             await HttpContext.InsertPaginationParameterInResponse(demandeLivraison, pagination.QuantityPage);
             List<DemandeLivraison> demandeLivraisons = await demandeLivraison.Paginate(pagination).ToListAsync();
             if (demandeLivraison == null)
