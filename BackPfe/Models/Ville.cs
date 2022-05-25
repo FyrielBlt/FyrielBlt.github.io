@@ -11,6 +11,7 @@ namespace BackPfe.Models
     {
         public Ville()
         {
+            Itineraire = new HashSet<Itineraire>();
             TrajetIdVille1Navigation = new HashSet<Trajet>();
             TrajetIdVille2Navigation = new HashSet<Trajet>();
         }
@@ -20,6 +21,7 @@ namespace BackPfe.Models
         public int IdIntermediaire { get; set; }
 
         public virtual Intermediaire IdIntermediaireNavigation { get; set; }
+        public virtual ICollection<Itineraire> Itineraire { get; set; }
         public virtual ICollection<Trajet> TrajetIdVille1Navigation { get; set; }
         public virtual ICollection<Trajet> TrajetIdVille2Navigation { get; set; }
     }

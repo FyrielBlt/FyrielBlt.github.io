@@ -14,5 +14,6 @@ namespace BackPfe.Models
         public int IdVille { get; set; }
 
         public virtual Transporteur IdTransporteurNavigation { get; set; }
+        public virtual Ville IdVilleNavigation { get; set; }
     }
 }

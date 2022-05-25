@@ -324,6 +324,11 @@ namespace BackPfe.Models
                     .WithMany(p => p.Itineraire)
                     .HasForeignKey(d => d.IdTransporteur)
                     .HasConstraintName("FK_Itineraire_Transporteur");
+
+                entity.HasOne(d => d.IdVilleNavigation)
+                    .WithMany(p => p.Itineraire)
+                    .HasForeignKey(d => d.IdVille)
+                    .HasConstraintName("FK_Itineraire_Ville");
             });
 
             modelBuilder.Entity<Offre>(entity =>

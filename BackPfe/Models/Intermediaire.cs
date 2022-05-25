@@ -25,7 +25,6 @@ namespace BackPfe.Models
         [NotMapped]
         public string ImageSrc { get; set; }
 
-
         public virtual Role IdRoleNavigation { get; set; }
         public virtual Users IdUserNavigation { get; set; }
         public virtual ICollection<DemandeDevis> DemandeDevis { get; set; }
