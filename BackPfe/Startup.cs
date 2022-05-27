@@ -85,6 +85,12 @@ namespace BackPfe
             });
             app.UseStaticFiles(new StaticFileOptions
             {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "File/TransporteurFiles/OffreFiles")),
+                RequestPath = "/File/TransporteurFiles/OffreFiles",
+
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "File/IntermediaireFile/factureClient")),
                 RequestPath = "/File/IntermediaireFile/factureClient",
 
@@ -95,6 +101,7 @@ namespace BackPfe
                 RequestPath = "/File/IntermediaireFile/factureTransporteur",
 
             });
+           
 
             app.UseEndpoints(endpoints =>
             {

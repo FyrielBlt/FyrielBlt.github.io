@@ -193,12 +193,5 @@
     "C:\\Users\\user\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\tourmalinecore.aspnetcore.jwtauthentication.core\\0.3.3\\tourmalinecore.aspnetcore.jwtauthentication.core.0.3.3.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problème de lecture du fichier cache C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

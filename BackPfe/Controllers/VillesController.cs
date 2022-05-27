@@ -56,7 +56,8 @@ namespace BackPfe.Controllers
             return ville;
         }
         [HttpGet("{id}/transporteur")]
-        public async Task<ActionResult<IEnumerable<Ville>>> GetVilleshown(int id)
+        public async Task<ActionResult<IEnumerable<Ville>>> GetVilleshown([FromQuery] Paginations pagination,
+int id)
         {
             var itineraires = _context.Itineraire.Where(t => t.IdTransporteur == id).ToList();
             var villes = _context.Ville.AsQueryable();
@@ -72,7 +73,10 @@ namespace BackPfe.Controllers
                 return NotFound();
             }
 
-            return villes.ToList();
+            await HttpContext.InsertPaginationParameterInResponse(villes, pagination.QuantityPage);
+            //element par page
+            List<Ville> villesliste = await villes.Paginate(pagination).ToListAsync();
+            return villesliste;
         }
        
     //villebyname
