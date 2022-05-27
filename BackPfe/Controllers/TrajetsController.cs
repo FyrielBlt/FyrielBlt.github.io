@@ -23,54 +23,31 @@ namespace BackPfe.Controllers
 
         // GET: api/Trajets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trajet>>> GetTrajet([FromQuery] Paginations pagination, [FromQuery] string name,[FromQuery] string ville1, [FromQuery] string ville2)
+        public async Task<ActionResult<IEnumerable<Trajet>>> GetTrajet([FromQuery] Paginations pagination, [FromQuery] string ville1, [FromQuery] string ville2, [FromQuery] string date, [FromQuery] string today)
         {
-           
-            // return await _context.Client.ToListAsync();
 
-           /* if (!string.IsNullOrEmpty(name))
-            {
-                queryable = queryable.Where(s => s.IdUserNavigation.Nom.Contains(name) || s.IdUserNavigation.Prenom.Contains(name));
-            }*/
-            // recherche pour demande de devis
-            if ((!string.IsNullOrEmpty(ville1) && !string.IsNullOrEmpty(ville2))|| (!string.IsNullOrEmpty(ville1) && !string.IsNullOrEmpty(ville2) && !string.IsNullOrEmpty(name)))
-            {
-                if (!string.IsNullOrEmpty(name))
-                {
-                    var queryable = _context.Trajet.Include(el => el.IdVille1Navigation)
-                 .Include(el => el.IdVille2Navigation)
-                 .Include(el => el.IdCamionNavigation.IdtransporteurNavigation)
-                 .Include(el => el.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation)
-                 .AsQueryable();
-
-                    foreach (Trajet trajet in queryable)
-                    {
-                        trajet.IdCamionNavigation.IdtransporteurNavigation.ImageSrc=
-                             String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, trajet.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation.Image);
-                    }
-                    queryable = queryable.Where(el => el.IdVille1Navigation.NomVille.Contains(ville1) && el.IdVille2Navigation.NomVille.Contains(ville2) && (el.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation.Nom.Contains(name) || el.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation.Prenom.Contains(name)));
-
-                    //ajout nombre de page
-                    await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
-                    //element par page
-                    List<Trajet> trajets = await queryable.Paginate(pagination).ToListAsync();
-
-                    return trajets;
-
-                }
-                else
-                {
-                    var queryable = _context.Trajet.Include(el => el.IdVille1Navigation)
+            var queryable = _context.Trajet.Include(el => el.IdVille1Navigation)
                   .Include(el => el.IdVille2Navigation)
                   .Include(el => el.IdCamionNavigation.IdtransporteurNavigation)
                   .Include(el => el.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation)
+                  .OrderByDescending(s => (s.Date).ToString())
                   .AsQueryable();
+            if (!string.IsNullOrEmpty(date))
+            {
+                queryable = queryable.Where(s => (s.Date).ToString().Contains(date));
+            }
+            if (!string.IsNullOrEmpty(ville1) || !string.IsNullOrEmpty(ville2))
+            {
+
+                if (!string.IsNullOrEmpty(ville1) && !string.IsNullOrEmpty(ville2))
+                {
                     foreach (Trajet trajet in queryable)
                     {
                         trajet.IdCamionNavigation.IdtransporteurNavigation.ImageSrc =
                              String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, trajet.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation.Image);
                     }
                     queryable = queryable.Where(el => el.IdVille1Navigation.NomVille.Contains(ville1) && el.IdVille2Navigation.NomVille.Contains(ville2));
+                    // queryable = queryable.Where(el => el.IdVille1Navigation.NomVille.Contains(ville1) || el.IdVille2Navigation.NomVille.Contains(ville2));
 
                     //ajout nombre de page
                     await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
@@ -79,15 +56,44 @@ namespace BackPfe.Controllers
 
                     return trajets;
                 }
-               
+                else
+                {
+                    foreach (Trajet trajet in queryable)
+                    {
+                        trajet.IdCamionNavigation.IdtransporteurNavigation.ImageSrc =
+                             String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, trajet.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation.Image);
+                    }
+                    queryable = queryable.Where(el => el.IdVille1Navigation.NomVille.Contains(ville1) || el.IdVille2Navigation.NomVille.Contains(ville2));
+
+                    //ajout nombre de page
+                    await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
+                    //element par page
+                    List<Trajet> trajets = await queryable.Paginate(pagination).ToListAsync();
+
+                    return trajets;
+                }
+
             }
             else
             {
-                return NotFound();
+                foreach (Trajet trajet in queryable)
+                {
+                    trajet.IdCamionNavigation.IdtransporteurNavigation.ImageSrc =
+                         String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, trajet.IdCamionNavigation.IdtransporteurNavigation.IdUserNavigation.Image);
+                }
+                //queryable = queryable.Where(el => el.IdVille1Navigation.NomVille.Contains(ville1) || el.IdVille2Navigation.NomVille.Contains(ville2));
+
+                //ajout nombre de page
+                await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
+                //element par page
+                List<Trajet> trajets = await queryable.Paginate(pagination).ToListAsync();
+
+                return trajets;
             }
-            
+
             // return await _context.Trajet.ToListAsync();
         }
+
         //get trajet de ce camion
         [HttpGet("{id}/camion")]
         public async Task<ActionResult<IEnumerable<Trajet>>> GetTrajetbycamion([FromQuery] Paginations pagination,
