@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackPfe.Models;
+using BackPfe.Paginate;
 
 namespace BackPfe.Controllers
 {
@@ -41,7 +42,7 @@ namespace BackPfe.Controllers
             return itineraire;
         }
         [HttpGet("{id}/transporteur")]
-        public async Task<ActionResult<IEnumerable<Itineraire>>> GetItinerairebyidtransporteur(int id)
+        public async Task<ActionResult<IEnumerable<Itineraire>>> GetItinerairebyidtransporteur( [FromQuery] Paginations pagination, int id)
         {
             var itineraire =  _context.Itineraire.Where(t => t.IdTransporteur == id).
                 Include(t=>t.IdVilleNavigation).

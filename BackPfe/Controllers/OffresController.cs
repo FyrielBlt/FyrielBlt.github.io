@@ -39,6 +39,7 @@ namespace BackPfe.Controllers
            
                 var offre = await _context.Offre.Where(t => t.IdOffre == id).
                 Include(t => t.IdDemandeNavigation)
+                .Include(t=>t.FileOffre)
                 .Include(t => t.IdEtatNavigation).Include(t => t.IdTransporteurNavigation).ThenInclude(t => t.IdUserNavigation).ToListAsync();
 
                 if (offre == null)
@@ -63,6 +64,8 @@ namespace BackPfe.Controllers
 
             var offre =  _context.Offre.Where(t => t.IdTransporteur == id)
                 .Include(t => t.IdEtatNavigation)
+                                .Include(t => t.FileOffre)
+
                 .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis)
                 .OrderByDescending
                (s => s.Datecreation)
@@ -77,8 +80,8 @@ namespace BackPfe.Controllers
             if (!string.IsNullOrEmpty(search))
             {
                 offre = offre.Where(s =>
-                 s.Prix.ToString().Contains(search)
-
+                 s.Prix.ToString()==(search) ||
+                  s.IdDemandeNavigation.IdDemande.ToString()==search
                 );
             }
 

@@ -32,7 +32,6 @@ namespace BackPfe.Controllers
                 .Include(el=>el.IdOffreNavigation)
                 .ThenInclude(el=>el.IdDemandeNavigation)
                 .Include(el => el.IdOffreNavigation)
-
                 .ThenInclude(el=>el.IdTransporteurNavigation)
                 .ThenInclude(el=>el.IdUserNavigation).AsQueryable();
             foreach (FactureTransporteur facture in queryable)

@@ -43,8 +43,8 @@ namespace BackPfe.Controllers
             {
                 return NotFound();
             }
-            users.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, users.Image);
-
+            users.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
+                Request.PathBase, users.Image);
             return users;
         }
         // GET: api/Users/5
@@ -165,7 +165,7 @@ namespace BackPfe.Controllers
                     motdepasse = users.Motdepasse,
                     societe = users.Societe,
                     image = users.Image,
-                    imageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
+                    srcOffreFile = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
                     Request.PathBase, users.Image),
 
                 });

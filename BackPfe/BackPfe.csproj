@@ -26,6 +26,7 @@
     <Folder Include="File\Client\DemandeLivraison\" />
     <Folder Include="File\Image\" />
     <Folder Include="File\IntermediaireFile\factureClient\" />
+    <Folder Include="File\TransporteurFiles\OffreFiles\" />
   </ItemGroup>
 
 

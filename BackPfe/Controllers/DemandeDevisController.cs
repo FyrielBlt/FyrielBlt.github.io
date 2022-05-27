@@ -94,9 +94,9 @@ namespace BackPfe.Controllers
                 .AsQueryable();
             if (!string.IsNullOrEmpty(search))
             {
-                demandeDevis = demandeDevis.Where(s => s.IdDemandeNavigation.Description.Contains(search) 
-                || s.IdDemandeNavigation.Adressdepart.Contains(search)
-                || s.IdDemandeNavigation.Adressarrive.Contains(search)
+                demandeDevis = demandeDevis.Where(s=>
+                 s.IdDemandeNavigation.IdDemande.ToString().Contains(search)
+
                 );
             }
             if (!string.IsNullOrEmpty(depart))
@@ -151,15 +151,14 @@ namespace BackPfe.Controllers
             int id)
         {
             var demandeDevis = _context.DemandeDevis.Where(t => t.IdTransporteur == id)
-              .Where(t => t.IdEtatNavigation.IdEtat != 1002)
+              .Where(t => t.IdEtatNavigation.Etat !="Non traité")
                 .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.IdEtatdemandeNavigation)
                 .Include(t=> t.IdEtatNavigation)
                  .AsQueryable();
             if (!string.IsNullOrEmpty(search))
             {
-                demandeDevis = demandeDevis.Where(s => s.IdDemandeNavigation.Description.Contains(search)
-                || s.IdDemandeNavigation.Adressdepart.Contains(search)
-                || s.IdDemandeNavigation.Adressarrive.Contains(search)
+                demandeDevis = demandeDevis.Where(s => s.IdDemandeNavigation.IdDemande.ToString().Contains(search)
+               
                 );
             }
             if (!string.IsNullOrEmpty(depart))
