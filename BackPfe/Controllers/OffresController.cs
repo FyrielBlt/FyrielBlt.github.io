@@ -135,23 +135,26 @@ namespace BackPfe.Controllers
 
         }
         [HttpGet("client/{id}")]
-        public async Task<ActionResult<IEnumerable<Offre>>> GetClientOffre([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string arrive, int id)
+        public async Task<ActionResult<IEnumerable<Offre>>> GetClientOffre([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string num, [FromQuery] string arrive, int id)
         {
             var offre =  _context.Offre.Where(t=>t.IdDemandeNavigation.IdclientNavigation.Iduser==id)
                 .Where(t => t.PrixFinale!=null)
                 .OrderByDescending(t=>t.PrixFinale)
                 .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.IdclientNavigation).ThenInclude(t=>t.IduserNavigation).Include(t => t.IdEtatNavigation).Include(t => t.IdTransporteurNavigation).ThenInclude(t=>t.IdUserNavigation).AsQueryable();
-            if (!string.IsNullOrEmpty(depart) && string.IsNullOrEmpty(arrive))
+            if (!string.IsNullOrEmpty(depart))
             {
                 offre =offre.Where(t=>t.IdDemandeNavigation.Adressdepart.Contains(depart));    
-            }else if(!string.IsNullOrEmpty(arrive) && string.IsNullOrEmpty(depart))
+            }
+            if(!string.IsNullOrEmpty(arrive))
             {
                 offre = offre.Where(t => t.IdDemandeNavigation.Adressarrive.Contains(arrive));
-            }else if(!string.IsNullOrEmpty(depart)&& !string.IsNullOrEmpty(arrive))
-            {
-                offre = offre.Where(t => t.IdDemandeNavigation.Adressarrive.Contains(arrive) && t.IdDemandeNavigation.Adressdepart.Contains(depart));
             }
-                await HttpContext.InsertPaginationParameterInResponse(offre, pagination.QuantityPage);
+            if (!string.IsNullOrEmpty(num))
+            {
+                offre = offre.Where(t => t.IdDemandeNavigation.IdDemande.ToString().Contains(num));
+            }
+
+            await HttpContext.InsertPaginationParameterInResponse(offre, pagination.QuantityPage);
             List<Offre> offres = await offre.Paginate(pagination).ToListAsync();
             if (offre == null)
             {
