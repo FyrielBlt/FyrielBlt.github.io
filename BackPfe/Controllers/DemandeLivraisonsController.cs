@@ -138,7 +138,8 @@ namespace BackPfe.Controllers
         [HttpGet("client/{id}")]
         public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetClientDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string num, [FromQuery] string arrive ,int id)
         {
-            var demandeLivraison =  _context.DemandeLivraison.Where(t=>t.IdclientNavigation.Iduser==id).Include(t=>t.IdEtatdemandeNavigation).Include(t=>t.Offre).AsQueryable();
+            var demandeLivraison =  _context.DemandeLivraison.Where(t=>t.IdclientNavigation.Iduser==id).Include(t=>t.IdEtatdemandeNavigation).Include(t=>t.Offre).Include(t=>t.FileDemandeLivraison).AsQueryable();
+            
             if (!string.IsNullOrEmpty(depart))
             {
                 demandeLivraison = demandeLivraison.Where(t => t.Adressdepart.Contains(depart));
@@ -151,7 +152,13 @@ namespace BackPfe.Controllers
             {
                 demandeLivraison = demandeLivraison.Where(t => t.IdDemande.ToString().Contains(num));
             }
-
+            foreach (DemandeLivraison d in demandeLivraison)
+            {
+               foreach (FileDemandeLivraison f in d.FileDemandeLivraison)
+                {
+                    f.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+                }
+            }
             await HttpContext.InsertPaginationParameterInResponse(demandeLivraison, pagination.QuantityPage);
             List<DemandeLivraison> demandeLivraisons = await demandeLivraison.Paginate(pagination).ToListAsync();
             if (demandeLivraison == null)
