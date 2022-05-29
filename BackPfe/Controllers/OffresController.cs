@@ -55,16 +55,17 @@ namespace BackPfe.Controllers
         public async Task<ActionResult<IEnumerable<Offre>>> GetOffrebyidtransporteur(
              [FromQuery] Paginations pagination,
              [FromQuery] string depart,
-              [FromQuery] string arrive,
-               [FromQuery] string date,
-                [FromQuery] string etat,
-                 [FromQuery] string search,
+             [FromQuery] string arrive,
+             [FromQuery] string date,
+             [FromQuery] string etat,
+             [FromQuery] string search,
             int id)
         {
 
             var offre =  _context.Offre.Where(t => t.IdTransporteur == id)
                 .Include(t => t.IdEtatNavigation)
-                                .Include(t => t.FileOffre)
+                .Include(t => t.FileOffre)
+                .Include(t=>t.FactureTransporteur)
 
                 .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis)
                 .OrderByDescending
@@ -105,6 +106,11 @@ namespace BackPfe.Controllers
                     offre = offre.Where(s =>
                     s.IdEtatNavigation.Etat.Contains("Refusé"));
                 }
+                if (etat == "Livre")
+                {
+                    offre = offre.Where(s =>
+                    s.IdEtatNavigation.Etat.Contains("Livré"));
+                }
                 if (etat == "Non traite")
                 {
                     offre = offre.Where(s =>
@@ -128,7 +134,13 @@ namespace BackPfe.Controllers
             await HttpContext.InsertPaginationParameterInResponse(offre, pagination.QuantityPage);
             //element par page
             List<Offre> offres= await offre.Paginate(pagination).ToListAsync();
-
+            foreach (Offre o in offre)
+            {
+                foreach (FileOffre f in o.FileOffre)
+                {
+                    f.SrcOffreFile = String.Format("{0}://{1}{2}/File/TransporteurFiles/OffreFiles/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+                }
+            }
             if (offre == null)
             {
                 return NotFound();

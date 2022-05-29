@@ -93,7 +93,10 @@ namespace BackPfe.Controllers
         public async Task<ActionResult<IEnumerable<Trajet>>> GetTrajetbycamion([FromQuery] Paginations pagination,
            [FromQuery] string depart,
               [FromQuery] string arrive,
-               [FromQuery] string date  , int id)
+               [FromQuery] string date , 
+               
+
+               int id)
         {
             // recherche pour demande de devis
            
@@ -109,6 +112,7 @@ namespace BackPfe.Controllers
                 trajet = trajet.Where(s => s.IdVille1Navigation.NomVille.Contains(depart) 
                 );
             }
+           
             if (!string.IsNullOrEmpty(arrive))
             {
                 trajet = trajet.Where(s => s.IdVille2Navigation.NomVille.Contains(arrive)
@@ -140,6 +144,7 @@ namespace BackPfe.Controllers
           [FromQuery] string arrive,
           [FromQuery] DateTime date,
           [FromQuery] string date2,
+          [FromQuery] string search,
 
               int id)
         {
@@ -163,6 +168,11 @@ namespace BackPfe.Controllers
 
 
                );
+            }
+            if (!string.IsNullOrEmpty(search))
+            {
+                trajet = trajet.Where(s => s.IdCamionNavigation.Codevehicule.Contains(search)
+                );
             }
             if (date2!=null)
             {

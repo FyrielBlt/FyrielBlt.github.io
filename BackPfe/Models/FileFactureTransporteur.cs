@@ -12,7 +12,7 @@ namespace BackPfe.Models
         public int IdFile { get; set; }
         public string NomFile { get; set; }
         public int IdFactTransporteur { get; set; }
-
+          
         public virtual FactureTransporteur IdFactTransporteurNavigation { get; set; }
     }
 }

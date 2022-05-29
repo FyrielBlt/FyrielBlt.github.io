@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -43,7 +43,7 @@ namespace BackPfe
                    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.WithOrigins("http://localhost:8080")
             .AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("x-wp-total").AllowCredentials().Build()));
-          
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options => {
                    options.TokenValidationParameters = new TokenValidationParameters
@@ -68,7 +68,7 @@ namespace BackPfe
             }
 
             app.UseCors("CorsPolicy");
-           
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -102,6 +102,7 @@ namespace BackPfe
 
             });
            
+
 
             app.UseEndpoints(endpoints =>
             {

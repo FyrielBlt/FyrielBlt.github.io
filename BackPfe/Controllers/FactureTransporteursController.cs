@@ -122,12 +122,27 @@ namespace BackPfe.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<FactureTransporteur>> PostFactureTransporteur(FactureTransporteur factureTransporteur)
+        public async Task<ActionResult<FactureTransporteur>> PostFactureTransporteur( [FromForm] FactureTransporteur factureTransporteur)
         {
-            _context.FactureTransporteur.Add(factureTransporteur);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFactureTransporteur", new { id = factureTransporteur.IdFactTransporteur }, factureTransporteur);
+            factureTransporteur.FactureFile = UploadFile.UploadImage(factureTransporteur.ImageFile, _hostEnvironment,
+                "File/IntermediaireFile/factureTransporteur/");
+                 _context.FactureTransporteur.Add(factureTransporteur);
+                 await _context.SaveChangesAsync();
+            return CreatedAtAction("GetFactureTransporteur", new
+            {
+                IdFactTransporteur =factureTransporteur.IdFactTransporteur,
+                EtatFacture = factureTransporteur.EtatFacture,
+                IdOffre =factureTransporteur.IdOffre,
+                FactureFile=factureTransporteur.FactureFile,
+                PayementFile=factureTransporteur.PayementFile,
+                Notification=factureTransporteur.Notification,
+                SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureTransporteur/{3}", Request.Scheme, Request.Host,
+                Request.PathBase, factureTransporteur.FactureFile),
+
+            });
+
+           
         }
 
         // DELETE: api/FactureTransporteurs/5

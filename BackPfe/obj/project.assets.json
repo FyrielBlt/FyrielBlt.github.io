@@ -9594,11 +9594,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
       "projectName": "BackPfe",
-      "projectPath": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\obj\\",
+      "outputPath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
