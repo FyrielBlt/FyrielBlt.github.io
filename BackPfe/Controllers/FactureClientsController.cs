@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BackPfe.Models;
 using Microsoft.AspNetCore.Hosting;
 using BackPfe.Upload;
-
+using BackPfe.Paginate;
 namespace BackPfe.Controllers
 {
     [Route("api/[controller]")]
@@ -43,6 +43,32 @@ namespace BackPfe.Controllers
             factureClient.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.FactureFile);
             factureClient.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.PayementFile);
             return factureClient;
+        }
+        [HttpGet("client/{id}")]
+        public async Task<ActionResult<IEnumerable<FactureClient>>> GetFactureClientForClient([FromQuery] Paginations pagination, [FromQuery] string num, [FromQuery] string etat, int id)
+        {
+            var factureClient =  _context.FactureClient.Where(t => t.IdDemandeLivraisonNavigation.IdclientNavigation.Iduser == id).AsQueryable();
+            if (!string.IsNullOrEmpty(num))
+            {
+                factureClient = factureClient.Where(t => t.IdFactClient.ToString().Contains(num));
+            }
+            if (!string.IsNullOrEmpty(etat))
+            {
+                factureClient = factureClient.Where(t => t.EtatFacture==etat);
+            }
+            await HttpContext.InsertPaginationParameterInResponse(factureClient, pagination.QuantityPage);
+            List<FactureClient> factureClients = await factureClient.Paginate(pagination).ToListAsync();
+            foreach (FactureClient f in factureClients)
+            {
+                f.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, f.FactureFile);
+                f.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, f.PayementFile);
+            }
+            if (factureClient == null)
+            {
+                return NotFound();
+            }
+            
+            return factureClients;
         }
 
         // PUT: api/FactureClients/5

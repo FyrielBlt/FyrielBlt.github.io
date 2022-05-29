@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackPfe.Models;
+using BackPfe.Paginate;
+using BackPfe.Upload;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BackPfe.Controllers
 {
@@ -14,17 +17,43 @@ namespace BackPfe.Controllers
     public class SocietesController : ControllerBase
     {
         private readonly BasePfeContext _context;
-
-        public SocietesController(BasePfeContext context)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public SocietesController(BasePfeContext context, IWebHostEnvironment hosting)
         {
             _context = context;
+            _hostEnvironment = hosting;
         }
+
+
 
         // GET: api/Societes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Societe>>> GetSociete()
+        public async Task<ActionResult<IEnumerable<Societe>>> GetSociete([FromQuery] Paginations pagination, [FromQuery] string societe)
         {
-            return await _context.Societe.ToListAsync();
+            var queryable = _context.Societe
+                 .Select(x => new Societe()
+                 {
+                     IdSociete = x.IdSociete,
+                     Nom = x.Nom,
+                     Image = x.Image,
+                     Description = x.Description,
+                     Adress = x.Adress,
+                     ImageSrc = String.Format("{0}://{1}{2}/File/TransporteurFiles/ImageSociete/{3}", Request.Scheme, Request.Host, Request.PathBase, x.Image)
+                 })
+
+             .AsQueryable();
+
+            if (!string.IsNullOrEmpty(societe))
+            {
+                queryable = queryable.Where(s => s.Nom.Contains(societe));
+            }
+            //ajout nombre de page
+            await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
+            //element par page
+            List<Societe> societes = await queryable.Paginate(pagination).ToListAsync();
+
+            return societes;
+            //  return await _context.Societe.ToListAsync();
         }
 
         // GET: api/Societes/5
@@ -45,14 +74,40 @@ namespace BackPfe.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSociete(int id, Societe societe)
+        public async Task<ActionResult<Societe>> PutSociete(int id, [FromForm] Societe societe)
         {
+
+
             if (id != societe.IdSociete)
             {
                 return BadRequest();
             }
+            var socie = await _context.Societe.FindAsync(id);
+            if (societe.ImageFile == null)
+            {
 
-            _context.Entry(societe).State = EntityState.Modified;
+                socie.Nom = societe.Nom;
+                socie.Adress = societe.Adress;
+                socie.Description = societe.Description;
+
+
+                _context.Entry(socie).State = EntityState.Modified;
+                socie.ImageSrc = String.Format("{0}://{1}{2}/File/TransporteurFiles/ImageSociete/{3}", Request.Scheme, Request.Host, Request.PathBase, socie.Image);
+
+            }
+            else
+            {
+                UploadFile.DeleteImage(societe.Image, _hostEnvironment, "File/TransporteurFiles/ImageSociete");
+                socie.Image = UploadFile.UploadImage(societe.ImageFile, _hostEnvironment, "File/TransporteurFiles/ImageSociete");
+                socie.Nom = societe.Nom;
+                socie.Adress = societe.Adress;
+                socie.Description = societe.Description;
+                _context.Entry(socie).State = EntityState.Modified;
+                socie.ImageSrc = String.Format("{0}://{1}{2}/File/TransporteurFiles/ImageSociete/{3}", Request.Scheme, Request.Host, Request.PathBase, socie.Image);
+
+            }
+
+
 
             try
             {
@@ -70,19 +125,41 @@ namespace BackPfe.Controllers
                 }
             }
 
-            return NoContent();
+
+
+            if (socie == null)
+            {
+                return NotFound();
+            }
+
+            return socie;
         }
 
         // POST: api/Societes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Societe>> PostSociete(Societe societe)
+        public async Task<ActionResult<Societe>> PostSociete([FromForm] Societe societe)
         {
-            _context.Societe.Add(societe);
+            /*_context.Societe.Add(societe);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSociete", new { id = societe.IdSociete }, societe);
+            return CreatedAtAction("GetSociete", new { id = societe.IdSociete }, societe);*/
+
+            societe.Image = UploadFile.UploadImage(societe.ImageFile, _hostEnvironment, "File/TransporteurFiles/ImageSociete");
+            _context.Societe.Add(societe);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetSociete", new
+            {
+                IdSociete = societe.IdSociete,
+                Nom = societe.Nom,
+                Image = societe.Image,
+                Description = societe.Description,
+                Adress = societe.Adress,
+                ImageSrc = String.Format("{0}://{1}{2}/File/TransporteurFiles/ImageSociete/{3}", Request.Scheme, Request.Host, Request.PathBase, societe.Image)
+            });
+
+
         }
 
         // DELETE: api/Societes/5

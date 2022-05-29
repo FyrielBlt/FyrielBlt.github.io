@@ -91,6 +91,12 @@ namespace BackPfe
             });
             app.UseStaticFiles(new StaticFileOptions
             {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "File/TransporteurFiles/ImageSociete")),
+                RequestPath = "/File/TransporteurFiles/ImageSociete",
+
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "File/Client/DemandeLivraison")),
                 RequestPath = "/File/Client/DemandeLivraison",
 
