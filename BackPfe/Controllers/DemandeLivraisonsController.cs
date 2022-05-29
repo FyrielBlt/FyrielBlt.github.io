@@ -23,67 +23,46 @@ namespace BackPfe.Controllers
 
         // GET: api/DemandeLivraisons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string sortOrder, [FromQuery] string name, [FromQuery] int filter = 0, [FromQuery] int filter1 = 0)
+        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string sortOrder, [FromQuery] string name, [FromQuery] string date, [FromQuery] int filter = 0, [FromQuery] int filter1 = 0)
         {
-            var queryable=_context.DemandeLivraison
+            var queryable = _context.DemandeLivraison
                .Include(t => t.DemandeDevis)
                .Include(t => t.Offre)
                .Include(t => t.FactureClient)
                .Include(t => t.IdclientNavigation)
                .ThenInclude(t => t.IduserNavigation)
                .Include(t => t.IdEtatdemandeNavigation)
-               .AsQueryable(); ;
+                .Where(hh => hh.IdEtatdemandeNavigation.EtatDemande != "Livré" && hh.IdEtatdemandeNavigation.EtatDemande != "Achevé")
+               .OrderBy(t => t.IdEtatdemandeNavigation.EtatDemande)
+
+               .AsQueryable();
+            if (!string.IsNullOrEmpty(date))
+            {
+                queryable = queryable.Where(s => (s.Datecreation).ToString().Contains(date));
+            }
             if (!string.IsNullOrEmpty(sortOrder))
             {
                 if (sortOrder == "oui")
                 {
-                     queryable = _context.DemandeLivraison
-               .Include(t => t.DemandeDevis)
-               .Include(t => t.Offre)
-               .Include(t => t.FactureClient)
-               .Include(t => t.IdclientNavigation)
-               .ThenInclude(t => t.IduserNavigation)
-               .Include(t => t.IdEtatdemandeNavigation).Where(s => s.FactureClient.Count != 0)
-               .AsQueryable();
+                    queryable = queryable.Where(s => s.FactureClient.Count != 0)
+              .AsQueryable();
 
-                   
+
                 }
                 if (sortOrder == "non")
                 {
-                     queryable = _context.DemandeLivraison
-                .Include(t => t.DemandeDevis)
-                .Include(t => t.Offre)
-                .Include(t => t.FactureClient)
-                .Include(t => t.IdclientNavigation)
-                .ThenInclude(t => t.IduserNavigation)
-                .Include(t => t.IdEtatdemandeNavigation).Where(s => s.FactureClient.Count == 0)
-                .AsQueryable();
+                    queryable = queryable.Where(s => s.FactureClient.Count == 0)
+               .AsQueryable();
                 }
             }
-            else
-            {
-                 queryable = _context.DemandeLivraison
-                               .Include(t => t.DemandeDevis)
-                               .Include(t => t.Offre)
-                               .Include(t => t.FactureClient)
-                               .Include(t => t.IdclientNavigation)
-                               .ThenInclude(t => t.IduserNavigation)
-                               .Include(t => t.IdEtatdemandeNavigation)
-                               .AsQueryable();
-            }
+
             if (!string.IsNullOrEmpty(name))
             {
-                
-                    queryable = _context.DemandeLivraison
-              .Include(t => t.DemandeDevis)
-              .Include(t => t.Offre)
-              .Include(t => t.FactureClient)
-              .Include(t => t.IdclientNavigation)
-              .ThenInclude(t => t.IduserNavigation)
-              .Include(t => t.IdEtatdemandeNavigation).Where(s => (s.IdclientNavigation.IduserNavigation.Nom.Contains(name)|| s.IdclientNavigation.IduserNavigation.Prenom.Contains(name)))
-              .AsQueryable();
 
-                
+                queryable = queryable.Where(s => (s.IdclientNavigation.IduserNavigation.Nom.Contains(name) || s.IdclientNavigation.IduserNavigation.Prenom.Contains(name)))
+          .AsQueryable();
+
+
             }
             foreach (DemandeLivraison demande in queryable)
             {
@@ -93,40 +72,59 @@ namespace BackPfe.Controllers
 
             if (filter != 0 && filter1 != 0)
             {
-                queryable = queryable.Where(hh => (hh.IdEtatdemande == filter) || (hh.IdEtatdemande == filter1));
+                queryable = _context.DemandeLivraison
+               .Include(t => t.DemandeDevis)
+               .Include(t => t.Offre)
+               .Include(t => t.FactureClient)
+               .Include(t => t.IdclientNavigation)
+               .ThenInclude(t => t.IduserNavigation)
+               .Include(t => t.IdEtatdemandeNavigation)
+               .OrderBy(t => t.IdEtatdemandeNavigation.EtatDemande)
+               .Where(hh => (hh.IdEtatdemande == filter) || (hh.IdEtatdemande == filter1)).AsQueryable();
             }
             if (filter != 0 && filter1 == 0)
             {
-                queryable = queryable.Where(hh => hh.IdEtatdemande == filter);
+                queryable = _context.DemandeLivraison
+               .Include(t => t.DemandeDevis)
+               .Include(t => t.Offre)
+               .Include(t => t.FactureClient)
+               .Include(t => t.IdclientNavigation)
+               .ThenInclude(t => t.IduserNavigation)
+               .Include(t => t.IdEtatdemandeNavigation)
+               .OrderBy(t => t.IdEtatdemandeNavigation.EtatDemande)
+               .Where(hh => hh.IdEtatdemande == filter)
+               .AsQueryable();
             }
-           
-            queryable = queryable.OrderBy(s => s.FactureClient.Count);
+
+            // queryable = queryable.OrderBy(s => s.FactureClient.Count);
             //var queryable = _context.DemandeLivraison.AsQueryable();
             //ajout nombre de page
             await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
             //element par page
             List<DemandeLivraison> demandeLivraisons = await queryable.Paginate(pagination).ToListAsync();
-           
+
             return demandeLivraisons;
-          
+
 
 
 
 
 
             //**********************************************
-           
-        }
 
-        // GET: api/DemandeLivraisons/5
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraison(int id)
         {
-            var demandeLivraison = await _context.DemandeLivraison.Where(el=>el.IdDemande ==id)
-                .Include(el=>el.IdclientNavigation)             
-                .Include(el => el.Offre).ThenInclude(el=>el.IdEtatNavigation)
-                .Include(el => el.Offre).ThenInclude(el => el.IdTransporteurNavigation).ThenInclude(el=>el.IdUserNavigation).ToListAsync();
-            
+            var demandeLivraison = await _context.DemandeLivraison.Where(el => el.IdDemande == id)
+                .Include(el => el.IdclientNavigation).ThenInclude(el => el.IduserNavigation)
+                .Include(el => el.Offre).ThenInclude(el => el.IdEtatNavigation)
+                .Include(el => el.IdEtatdemandeNavigation)
+                .Include(el => el.Offre).ThenInclude(el => el.IdTransporteurNavigation).ThenInclude(el => el.IdUserNavigation).ToListAsync();
+            foreach (DemandeLivraison demande in demandeLivraison)
+            {
+                demande.IdclientNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, demande.IdclientNavigation.IduserNavigation.Image);
+            }
             if (demandeLivraison == null)
             {
                 return NotFound();
@@ -134,6 +132,7 @@ namespace BackPfe.Controllers
 
             return demandeLivraison;
         }
+
         // GET: api/DemandeLivraisons/5
         [HttpGet("client/{id}")]
         public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetClientDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string depart, [FromQuery] string num, [FromQuery] string arrive ,int id)

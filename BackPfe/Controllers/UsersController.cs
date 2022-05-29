@@ -165,7 +165,7 @@ namespace BackPfe.Controllers
                     motdepasse = users.Motdepasse,
                     societe = users.Societe,
                     image = users.Image,
-                    srcOffreFile = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
+                    imageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
                     Request.PathBase, users.Image),
 
                 });
