@@ -48,6 +48,10 @@ namespace BackPfe.Controllers
             {
                 etats = await _context.EtatDemandeLivraison.Where(t => t.EtatDemande == "Livré").FirstAsync();
             }
+            if (etat == "acheve")
+            {
+                etats = await _context.EtatDemandeLivraison.Where(t => t.EtatDemande == "Achevé").FirstAsync();
+            }
 
 
             return etats;

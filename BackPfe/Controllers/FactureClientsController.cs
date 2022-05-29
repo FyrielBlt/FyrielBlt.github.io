@@ -75,13 +75,15 @@ namespace BackPfe.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFactureClient(int id, FactureClient factureClient)
+        public async Task<ActionResult<FactureClient>> PutFactureClient(int id,[FromForm] FactureClient factureClient)
         {
+           
+
             if (id != factureClient.IdFactClient)
             {
                 return BadRequest();
             }
-
+            factureClient.PayementFile = UploadFile.UploadImage(factureClient.ImageFile, _hostEnvironment, "File/IntermediaireFile/factureClient");
             _context.Entry(factureClient).State = EntityState.Modified;
 
             try
@@ -99,8 +101,12 @@ namespace BackPfe.Controllers
                     throw;
                 }
             }
+            factureClient.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.FactureFile);
+            factureClient.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.PayementFile);
 
-            return NoContent();
+
+            // return facture;
+            return factureClient;
         }
 
         // POST: api/FactureClients

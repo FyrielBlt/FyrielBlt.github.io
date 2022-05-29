@@ -1,0 +1,9 @@
+
+@foreach ($events as $e)
+
+    <img src="{{asset('public/image/'.$e->image)}}" alt="">
+@endforeach
+
+
+
+git token : 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
