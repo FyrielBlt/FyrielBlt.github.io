@@ -136,6 +136,11 @@ namespace BackPfe.Controllers
             List<Offre> offres= await offre.Paginate(pagination).ToListAsync();
             foreach (Offre o in offre)
             {
+                foreach (FactureTransporteur ft in o.FactureTransporteur)
+                {
+                    ft.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureTransporteur/{3}", Request.Scheme, Request.Host, Request.PathBase, ft.FactureFile);
+                    ft.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureTransporteur/{3}", Request.Scheme, Request.Host, Request.PathBase, ft.PayementFile);
+                }
                 foreach (FileOffre f in o.FileOffre)
                 {
                     f.SrcOffreFile = String.Format("{0}://{1}{2}/File/TransporteurFiles/OffreFiles/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
@@ -170,7 +175,7 @@ namespace BackPfe.Controllers
             }
 
             await HttpContext.InsertPaginationParameterInResponse(offre, pagination.QuantityPage);
-            List<Offre> offres = await offre.Paginate(pagination).ToListAsync();
+            List<Offre> offres = await offre.Paginate(pagination).OrderByDescending(t => t.IdOffre).ToListAsync();
             if (offre == null)
             {
                 return NotFound();

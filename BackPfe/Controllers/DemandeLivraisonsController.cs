@@ -159,7 +159,7 @@ namespace BackPfe.Controllers
                 }
             }
             await HttpContext.InsertPaginationParameterInResponse(demandeLivraison, pagination.QuantityPage);
-            List<DemandeLivraison> demandeLivraisons = await demandeLivraison.Paginate(pagination).ToListAsync();
+            List<DemandeLivraison> demandeLivraisons = await demandeLivraison.Paginate(pagination).OrderByDescending(t=>t.IdDemande).ToListAsync();
             if (demandeLivraison == null)
             {
                 return NotFound();
