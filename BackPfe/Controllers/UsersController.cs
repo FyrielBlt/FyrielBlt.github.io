@@ -67,8 +67,11 @@ namespace BackPfe.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Users>> PutUsers(int id, [FromForm] Users users)
         {
-            List<Users> test = _context.Users.Where(t => t.Email == users.Email)
-                .Where(t => t.IdUser != users.IdUser)
+            List<Users> test = _context.Users
+                                .Where(t => t.IdUser != users.IdUser)
+
+
+                .Where(t => t.Email == users.Email )
                 .ToList();
             if (test.Count == 0)
             {
@@ -85,6 +88,7 @@ namespace BackPfe.Controllers
                     user.Email = users.Email;
                     user.Societe = users.Societe;
                     user.Motdepasse = users.Motdepasse;
+                    user.Tel = users.Tel;
                     _context.Entry(user).State = EntityState.Modified;
                     user.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, user.Image);
 
@@ -98,6 +102,7 @@ namespace BackPfe.Controllers
                     user.Email = users.Email;
                     user.Societe = users.Societe;
                     user.Motdepasse = users.Motdepasse;
+                    user.Tel = users.Tel;
                     _context.Entry(user).State = EntityState.Modified;
                     user.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, user.Image);
 
@@ -132,6 +137,7 @@ namespace BackPfe.Controllers
             }
             else
             {
+              
                 return NotFound("Email doit etre unique");
             }
 
@@ -153,7 +159,10 @@ namespace BackPfe.Controllers
             List<Users> test = _context.Users.Where(t => t.Email == users.Email).ToList();
             if (test.Count == 0)
             {
-                users.Image = UploadFile.UploadImage(users.ImageFile, _hostEnvironment, "File/Image");
+                if (users.ImageFile != null)
+                {
+                    users.Image = UploadFile.UploadImage(users.ImageFile, _hostEnvironment, "File/Image");
+                }
                 _context.Users.Add(users);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("GetUsers", new
@@ -165,7 +174,8 @@ namespace BackPfe.Controllers
                     motdepasse = users.Motdepasse,
                     societe = users.Societe,
                     image = users.Image,
-                    imageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
+                    tel = users.Tel,
+                   imageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
                     Request.PathBase, users.Image),
 
                 });

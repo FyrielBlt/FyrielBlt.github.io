@@ -54,7 +54,7 @@ namespace BackPfe.Controllers
             }
             if (!string.IsNullOrEmpty(etat))
             {
-                factureClient = factureClient.Where(t => t.EtatFacture==etat);
+               factureClient = factureClient.Where(t => t.EtatDacture==etat);
             }
             await HttpContext.InsertPaginationParameterInResponse(factureClient, pagination.QuantityPage);
             List<FactureClient> factureClients = await factureClient.Paginate(pagination).ToListAsync();
@@ -131,7 +131,6 @@ namespace BackPfe.Controllers
             return CreatedAtAction("GetFactureClient", new
             {
                 IdFactClient = factureClient.IdFactClient,
-                EtatFacture = factureClient.EtatFacture,
                 IdDemandeLivraison = factureClient.IdDemandeLivraison,
                 FactureFile = factureClient.FactureFile,
                 PayementFile = factureClient.PayementFile,

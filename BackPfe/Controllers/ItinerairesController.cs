@@ -44,9 +44,9 @@ namespace BackPfe.Controllers
         [HttpGet("{id}/transporteur")]
         public async Task<ActionResult<IEnumerable<Itineraire>>> GetItinerairebyidtransporteur( [FromQuery] Paginations pagination, int id)
         {
-            var itineraire =  _context.Itineraire.Where(t => t.IdTransporteur == id).
-                Include(t=>t.IdVilleNavigation).
-                ToList()
+            var itineraire = _context.Itineraire.Where(t => t.IdTransporteur == id).
+                Include(t => t.IdVilleNavigation).
+                AsQueryable();
            
                ;
 
@@ -54,8 +54,11 @@ namespace BackPfe.Controllers
             {
                 return NotFound();
             }
-
-            return itineraire;
+            //ajout nombre de page
+            await HttpContext.InsertPaginationParameterInResponse(itineraire, pagination.QuantityPage);
+            //element par page
+            List<Itineraire> itineraires = await itineraire.Paginate(pagination).ToListAsync();
+            return itineraires;
         }
 
         // PUT: api/Itineraires/5

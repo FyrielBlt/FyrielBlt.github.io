@@ -9,6 +9,7 @@ using BackPfe.Models;
 using BackPfe.Upload;
 using Microsoft.AspNetCore.Hosting;
 using BackPfe.Paginate;
+using System.Net.Mail;
 
 namespace BackPfe.Controllers
 {
@@ -129,10 +130,30 @@ namespace BackPfe.Controllers
                 "File/IntermediaireFile/factureTransporteur/");
                  _context.FactureTransporteur.Add(factureTransporteur);
                  await _context.SaveChangesAsync();
+            if (factureTransporteur.PayementFile ==null)
+            {
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("beltaiefferiel98@gmail.com");
+                    mail.To.Add("malekbouzayani9@gmail.com");
+                    mail.Subject = "Facture Transport ajouté";
+                    mail.IsBodyHtml = true;
+                    string htmlBody = "<img style ='border-radius: 50px' src = 'https://scontent.ftun15-1.fna.fbcdn.net/v/t1.18169-9/21371290_844588729051616_3220980191669635459_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=z_UPPke7CwsAX_GUsgk&_nc_ht=scontent.ftun15-1.fna&oh=00_AT_aJCN0JnSMKh_DPnDU4fXe2nIF4R3AzTAEJvs7a-6Cyg&oe=62BDF38A' alt = 'Image Profil' /> " +
+                        "<h2>Nous tenons à vous informer que votre commande a été livré avec succés.<br>" +
+                  "Nous avons envoyé la facture.</h2> <br><br> Cordialement,";
+                    mail.Body = htmlBody;
+                    using (SmtpClient stmp = new SmtpClient("smtp.gmail.com", 587))
+                    {
+                        stmp.Credentials = new System.Net.NetworkCredential("beltaiefferiel98@gmail.com", "ferielsansa01052018*0");
+                        stmp.EnableSsl = true;
+                        stmp.Send(mail);
+                    }
+
+                }
+            }
             return CreatedAtAction("GetFactureTransporteur", new
             {
                 IdFactTransporteur =factureTransporteur.IdFactTransporteur,
-                EtatFacture = factureTransporteur.EtatFacture,
                 IdOffre =factureTransporteur.IdOffre,
                 FactureFile=factureTransporteur.FactureFile,
                 PayementFile=factureTransporteur.PayementFile,

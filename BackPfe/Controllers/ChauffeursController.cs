@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using BackPfe.Models;
 using BackPfe.Paginate;
 using System.Net.Mail;
-
 namespace BackPfe.Controllers
 {
 
@@ -68,20 +67,27 @@ namespace BackPfe.Controllers
         {
 
 
-
+           
             var chauffeur = _context.Chauffeur.Where(t => t.Idsociete == societe)
                 .Include(t => t.IduserNavigation).Include(t => t.Camion)
                 .ThenInclude(t => t.Trajet).ThenInclude(t => t.IdVille2Navigation)
-             .Select(x => new Chauffeur()
-             {
-                 Idchauffeur = x.Idchauffeur,
-                 Iduser = x.Iduser,
-                 Cinchauffeur = x.Cinchauffeur,
-                 IduserNavigation = x.IduserNavigation,
-                 ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, x.IduserNavigation.Image)
-             })
+                  .Select(x => new Chauffeur()
+                  {
+                      Idchauffeur = x.Idchauffeur,
+                      Iduser = x.Iduser,
+                      Cinchauffeur = x.Cinchauffeur,
+                      IduserNavigation = x.IduserNavigation,
+                      //test image existe 
+                      ImageSrc=
+                      x.IduserNavigation.Image==null ?  null : String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase,
+                      x.IduserNavigation.Image
+                     )
+                  })
 
                  .AsQueryable();
+
+
+
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -155,13 +161,17 @@ namespace BackPfe.Controllers
             {
                 _context.Chauffeur.Add(chauffeurs);
                 await _context.SaveChangesAsync();
-                using (MailMessage mail = new MailMessage())
+             /*   using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress("beltaiefferiel98@gmail.com");
-                    mail.To.Add(email);
-                    mail.Subject = "Votre Compte Chauffeur a été bienc créé";
-                    mail.Body = "Pour contacter a votre compte rendez vous sur le site : ";
+                    mail.To.Add("ferielcontact.email@gmail.com");
+                    mail.Subject = "Votre Compte Chauffeur a été bien créé";
                     mail.IsBodyHtml = true;
+                    string htmlBody = "Chaufeur " +chauffeurs.Cinchauffeur+
+                       
+                        "<img style ='border-radius: 50px' src = 'https://scontent.ftun15-1.fna.fbcdn.net/v/t1.18169-9/21371290_844588729051616_3220980191669635459_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=z_UPPke7CwsAX_GUsgk&_nc_ht=scontent.ftun15-1.fna&oh=00_AT_aJCN0JnSMKh_DPnDU4fXe2nIF4R3AzTAEJvs7a-6Cyg&oe=62BDF38A' alt = 'Image Profil' /> " +
+                        "<h2>Nous tenons à vous informer que votre compte chauffeur a été bien créé</h2> <br><br> Cordialement,";
+                    mail.Body = htmlBody;
                     using (SmtpClient stmp = new SmtpClient("smtp.gmail.com", 587))
                     {
                         stmp.Credentials = new System.Net.NetworkCredential("beltaiefferiel98@gmail.com", "ferielsansa01052018*0");
@@ -169,7 +179,7 @@ namespace BackPfe.Controllers
                         stmp.Send(mail);
                     }
 
-                }
+                }*/
                 return CreatedAtAction("GetChauffeurs", new { id = chauffeurs.Idchauffeur }, chauffeurs);
             }
 
