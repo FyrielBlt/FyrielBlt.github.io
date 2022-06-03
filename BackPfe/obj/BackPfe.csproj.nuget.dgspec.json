@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\backpfe\\BackPfe.csproj": {}
+    "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\BackPfe\\BackPfe.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\backpfe\\BackPfe.csproj": {
+    "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\BackPfe\\BackPfe.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\backpfe\\BackPfe.csproj",
+        "projectUniqueName": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\BackPfe\\BackPfe.csproj",
         "projectName": "BackPfe",
-        "projectPath": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\backpfe\\BackPfe.csproj",
+        "projectPath": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\BackPfe\\BackPfe.csproj",
         "packagesPath": "C:\\Users\\Karim Omrane\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\backpfe\\obj\\",
+        "outputPath": "C:\\Users\\Karim Omrane\\Desktop\\PFE FI\\Backend\\BackPfe\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Karim Omrane\\AppData\\Roaming\\NuGet\\NuGet.Config",

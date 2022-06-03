@@ -30,7 +30,6 @@ namespace BackPfe.Models
         public virtual DbSet<FactureClient> FactureClient { get; set; }
         public virtual DbSet<FactureTransporteur> FactureTransporteur { get; set; }
         public virtual DbSet<FileDemandeLivraison> FileDemandeLivraison { get; set; }
-        public virtual DbSet<FileFactureTransporteur> FileFactureTransporteur { get; set; }
         public virtual DbSet<FileOffre> FileOffre { get; set; }
         public virtual DbSet<Intermediaire> Intermediaire { get; set; }
         public virtual DbSet<Itineraire> Itineraire { get; set; }
@@ -204,8 +203,7 @@ namespace BackPfe.Models
             {
                 entity.HasKey(e => e.IdFactClient);
 
-                entity.Property(e => e.EtatFacture)
-                    .IsRequired()
+                entity.Property(e => e.EtatDacture)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -227,11 +225,6 @@ namespace BackPfe.Models
             modelBuilder.Entity<FactureTransporteur>(entity =>
             {
                 entity.HasKey(e => e.IdFactTransporteur);
-
-                entity.Property(e => e.EtatFacture)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.FactureFile)
                     .IsRequired()
@@ -264,24 +257,6 @@ namespace BackPfe.Models
                     .WithMany(p => p.FileDemandeLivraison)
                     .HasForeignKey(d => d.IdDemande)
                     .HasConstraintName("FK_FileDemandeLivraison_DemandeLivraison");
-            });
-
-            modelBuilder.Entity<FileFactureTransporteur>(entity =>
-            {
-                entity.HasKey(e => e.IdFile);
-
-                entity.Property(e => e.IdFile).HasColumnName("idFile");
-
-                entity.Property(e => e.NomFile)
-                    .IsRequired()
-                    .HasColumnName("nomFile")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.IdFactTransporteurNavigation)
-                    .WithMany(p => p.FileFactureTransporteur)
-                    .HasForeignKey(d => d.IdFactTransporteur)
-                    .HasConstraintName("FK_FileFactureTransporteur_FactureTransporteur");
             });
 
             modelBuilder.Entity<FileOffre>(entity =>
@@ -414,7 +389,7 @@ namespace BackPfe.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                    .IsRequired()
+                   
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -479,7 +454,7 @@ namespace BackPfe.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                    .IsRequired()
+                   
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -496,6 +471,10 @@ namespace BackPfe.Models
                 entity.Property(e => e.Prenom)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Tel)
+                    .HasMaxLength(13)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.SocieteNavigation)
