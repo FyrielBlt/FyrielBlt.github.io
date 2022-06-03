@@ -111,7 +111,7 @@ namespace BackPfe.Controllers
                 .Include(t=>t.IdCamionNavigation).ThenInclude(t=>t.IdchauffeurNavigation)
                   .Include(el => el.IdVille1Navigation)
                  .Include(el => el.IdVille2Navigation)
-                 
+                 .OrderByDescending(t => t.IdTrajet)
                  .AsQueryable();
             if (!string.IsNullOrEmpty(depart))
             {
@@ -161,6 +161,7 @@ namespace BackPfe.Controllers
             .Include(t=>t.IdCamionNavigation).ThenInclude(t=>t.IdtypeNavigation)
             .Include(el => el.IdVille1Navigation)
             .Include(el => el.IdVille2Navigation)
+            .OrderByDescending(t => t.IdTrajet)
             .AsQueryable();
             if (!string.IsNullOrEmpty(depart))
             {
@@ -217,6 +218,7 @@ namespace BackPfe.Controllers
         {
             var trajets = _context.Trajet.Where(t => t.IdCamionNavigation.Idtransporteur == id)
                 .Include(t=>t.IdVille1Navigation).Include(t=>t.IdVille2Navigation)
+                .OrderByDescending(t => t.IdTrajet)
                 .ToList();
 
             if (trajets == null)

@@ -60,7 +60,10 @@ namespace BackPfe.Controllers
 int id)
         {
             var itineraires = _context.Itineraire.Where(t => t.IdTransporteur == id).ToList();
-            var villes = _context.Ville.AsQueryable();
+            var villes = _context.Ville.OrderByDescending(t=>t.IdVille)
+                .
+                
+                AsQueryable();
 
                 foreach(Itineraire i in itineraires)
             {
