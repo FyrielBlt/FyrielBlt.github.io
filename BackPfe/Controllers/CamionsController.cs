@@ -45,6 +45,8 @@ namespace BackPfe.Controllers
                 .Include(t => t.IdchauffeurNavigation).ThenInclude(t=>t.IduserNavigation)
                 .Include(t=>t.Trajet).ThenInclude(t=>t.IdVille1Navigation).ThenInclude(t => t.TrajetIdVille2Navigation)
                 .Include(t=>t.IdtypeNavigation)
+                                 .OrderByDescending(t => t.Idcamion)
+
                 .AsQueryable();
             if (!string.IsNullOrEmpty(type))
             {

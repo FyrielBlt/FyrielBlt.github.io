@@ -71,6 +71,8 @@ namespace BackPfe.Controllers
             var chauffeur = _context.Chauffeur.Where(t => t.Idsociete == societe)
                 .Include(t => t.IduserNavigation).Include(t => t.Camion)
                 .ThenInclude(t => t.Trajet).ThenInclude(t => t.IdVille2Navigation)
+                                 .OrderByDescending(t => t.Idchauffeur)
+
                   .Select(x => new Chauffeur()
                   {
                       Idchauffeur = x.Idchauffeur,
@@ -161,7 +163,7 @@ namespace BackPfe.Controllers
             {
                 _context.Chauffeur.Add(chauffeurs);
                 await _context.SaveChangesAsync();
-             /*   using (MailMessage mail = new MailMessage())
+                using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress("beltaiefferiel98@gmail.com");
                     mail.To.Add("ferielcontact.email@gmail.com");
@@ -174,12 +176,12 @@ namespace BackPfe.Controllers
                     mail.Body = htmlBody;
                     using (SmtpClient stmp = new SmtpClient("smtp.gmail.com", 587))
                     {
-                        stmp.Credentials = new System.Net.NetworkCredential("beltaiefferiel98@gmail.com", "ferielsansa01052018*0");
+                        stmp.Credentials = new System.Net.NetworkCredential("easyordershipping@gmail.com", "karimmalekferiel");
                         stmp.EnableSsl = true;
                         stmp.Send(mail);
                     }
 
-                }*/
+                }
                 return CreatedAtAction("GetChauffeurs", new { id = chauffeurs.Idchauffeur }, chauffeurs);
             }
 

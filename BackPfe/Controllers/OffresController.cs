@@ -69,7 +69,7 @@ namespace BackPfe.Controllers
 
                 .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis)
                 .OrderByDescending
-               (s => s.Datecreation)
+               (s => s.IdOffre)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(arrive))
             {
@@ -104,6 +104,11 @@ namespace BackPfe.Controllers
                     offre = offre.Where(s =>
                     s.IdEtatNavigation.Etat.Contains("Accepté"));
                 }
+                if (etat == "Livre")
+                {
+                    offre = offre.Where(s =>
+                    s.IdEtatNavigation.Etat.Contains("Livré"));
+                }
 
                 if (etat == "Refuse")
                 {
@@ -124,6 +129,11 @@ namespace BackPfe.Controllers
                 {
                     offre = offre.Where(s =>
                     s.IdEtatNavigation.Etat.Contains("En cours de traitement"));
+                }
+                if (etat == "indisponible")
+                {
+                    offre = offre.Where(s =>
+                    s.IdEtatNavigation.Etat.Contains("Indisponible"));
                 }
 
             }

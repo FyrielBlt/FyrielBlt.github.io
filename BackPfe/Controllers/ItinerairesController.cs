@@ -45,7 +45,7 @@ namespace BackPfe.Controllers
         public async Task<ActionResult<IEnumerable<Itineraire>>> GetItinerairebyidtransporteur( [FromQuery] Paginations pagination, int id)
         {
             var itineraire = _context.Itineraire.Where(t => t.IdTransporteur == id).
-                Include(t => t.IdVilleNavigation).
+                Include(t => t.IdVilleNavigation).OrderByDescending(t=>t.IdItineraire).
                 AsQueryable();
            
                ;

@@ -90,7 +90,7 @@ namespace BackPfe.Controllers
                 .Include(t=>t.IdEtatNavigation)
                 .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.FileDemandeLivraison)
 
-                .OrderBy(s => s.DateEnvoit)
+                                 .OrderByDescending(t => t.IdDemandeDevis)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
@@ -158,10 +158,16 @@ namespace BackPfe.Controllers
             int id)
         {
             var demandeDevis = _context.DemandeDevis.Where(t => t.IdTransporteur == id)
-              .Where(t => t.IdEtatNavigation.Etat !="Non traité")
-                .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.IdEtatdemandeNavigation)
-                .Include(t=> t.IdEtatNavigation)
-                 .AsQueryable();
+
+               .Where(t => t.IdEtatNavigation.Etat != "Non traité")
+
+
+               .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.IdEtatdemandeNavigation)
+               .Include(t => t.IdEtatNavigation)
+               .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.FileDemandeLivraison)
+
+                                .OrderByDescending(t => t.IdDemandeDevis)
+               .AsQueryable();
             if (!string.IsNullOrEmpty(search))
             {
                 demandeDevis = demandeDevis.Where(s => s.IdDemandeNavigation.IdDemande.ToString().Contains(search)
@@ -210,7 +216,13 @@ namespace BackPfe.Controllers
             await HttpContext.InsertPaginationParameterInResponse(demandeDevis, pagination.QuantityPage);
             //element par page
             List<DemandeDevis> demandes = await demandeDevis.Paginate(pagination).ToListAsync();
-
+            foreach (DemandeDevis d in demandes)
+            {
+                foreach (FileDemandeLivraison f in d.IdDemandeNavigation.FileDemandeLivraison)
+                {
+                    f.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+                }
+            }
             if (demandeDevis == null)
             {
                 return NotFound();
