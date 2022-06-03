@@ -285,24 +285,24 @@ namespace BackPfe.Controllers
         {
             _context.Offre.Add(offre);
             await _context.SaveChangesAsync();
-          /*  using (MailMessage mail = new MailMessage())
+           using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("beltaiefferiel98@gmail.com");
-                mail.To.Add("malekbouzayani9@gmail.com");
-                mail.Subject = "Votre Compte Chauffeur a été bienc créé";
+                mail.From = new MailAddress("feriel@gmail.com");
+                mail.To.Add("Easy_Order@gmail.com");
+                mail.Subject = "Nouvelle Offre";
                 mail.IsBodyHtml = true;
                 string htmlBody = "<img style ='border-radius: 50px' src = 'https://scontent.ftun15-1.fna.fbcdn.net/v/t1.18169-9/21371290_844588729051616_3220980191669635459_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=z_UPPke7CwsAX_GUsgk&_nc_ht=scontent.ftun15-1.fna&oh=00_AT_aJCN0JnSMKh_DPnDU4fXe2nIF4R3AzTAEJvs7a-6Cyg&oe=62BDF38A' alt = 'Image Profil' /> " +
                     "<h2>Nous tenons à vous informer qu'une nouvelle offre vient de vous être envoyée.<br>" +
-              "Assurez - vous de le traiter dès que possible.</h2> <br><br> Cordialement,";
+              "Assurez - vous de le traiter dès que possible.</h2>  Description : "+offre.Description+ "<br>Prix :  " + offre.Prix + " <br> Cordialement,<br>";
                 mail.Body = htmlBody;
-                using (SmtpClient stmp = new SmtpClient("smtp.gmail.com", 587))
+                using (SmtpClient stmp = new SmtpClient("smtp.mailtrap.io", 2525))
                 {
-                    stmp.Credentials = new System.Net.NetworkCredential("beltaiefferiel98@gmail.com", "ferielsansa01052018*0");
+                    stmp.Credentials = new System.Net.NetworkCredential("9fd3fb2f9c2ff4", "39a7a0d5ed76fd");
                     stmp.EnableSsl = true;
                     stmp.Send(mail);
                 }
 
-            }*/
+            }
             return CreatedAtAction("GetOffre", new { id = offre.IdOffre,
             }, offre);
         }

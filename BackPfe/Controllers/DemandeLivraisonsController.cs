@@ -23,7 +23,7 @@ namespace BackPfe.Controllers
 
         // GET: api/DemandeLivraisons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string sortOrder, [FromQuery] string name, [FromQuery] string date, [FromQuery] int filter = 0, [FromQuery] int filter1 = 0)
+        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraison([FromQuery] Paginations pagination, [FromQuery] string sortOrder, [FromQuery] string name, [FromQuery] string num, [FromQuery] string date, [FromQuery] int filter = 0, [FromQuery] int filter1 = 0)
         {
             var queryable = _context.DemandeLivraison
                .Include(t => t.DemandeDevis)
@@ -36,34 +36,17 @@ namespace BackPfe.Controllers
                .OrderBy(t => t.IdEtatdemandeNavigation.EtatDemande)
 
                .AsQueryable();
-            if (!string.IsNullOrEmpty(date))
+            foreach (DemandeLivraison demande in queryable)
             {
-                queryable = queryable.Where(s => (s.Datecreation).ToString().Contains(date));
-            }
-            if (!string.IsNullOrEmpty(sortOrder))
-            {
-                if (sortOrder == "oui")
+                foreach (FactureClient factureClient in demande.FactureClient)
                 {
-                    queryable = queryable.Where(s => s.FactureClient.Count != 0)
-              .AsQueryable();
-
-
+                    factureClient.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.PayementFile);
+                    factureClient.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.FactureFile);
                 }
-                if (sortOrder == "non")
-                {
-                    queryable = queryable.Where(s => s.FactureClient.Count == 0)
-               .AsQueryable();
-                }
+
             }
 
-            if (!string.IsNullOrEmpty(name))
-            {
 
-                queryable = queryable.Where(s => (s.IdclientNavigation.IduserNavigation.Nom.Contains(name) || s.IdclientNavigation.IduserNavigation.Prenom.Contains(name)))
-          .AsQueryable();
-
-
-            }
             foreach (DemandeLivraison demande in queryable)
             {
                 demande.IdclientNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, demande.IdclientNavigation.IduserNavigation.Image);
@@ -81,6 +64,16 @@ namespace BackPfe.Controllers
                .Include(t => t.IdEtatdemandeNavigation)
                .OrderBy(t => t.IdEtatdemandeNavigation.EtatDemande)
                .Where(hh => (hh.IdEtatdemande == filter) || (hh.IdEtatdemande == filter1)).AsQueryable();
+                foreach (DemandeLivraison demande in queryable)
+                {
+                    foreach (FactureClient factureClient in demande.FactureClient)
+                    {
+                        factureClient.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.FactureFile);
+
+                        factureClient.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.PayementFile);
+                    }
+
+                }
             }
             if (filter != 0 && filter1 == 0)
             {
@@ -94,6 +87,52 @@ namespace BackPfe.Controllers
                .OrderBy(t => t.IdEtatdemandeNavigation.EtatDemande)
                .Where(hh => hh.IdEtatdemande == filter)
                .AsQueryable();
+                foreach (DemandeLivraison demande in queryable)
+                {
+                    foreach (FactureClient factureClient in demande.FactureClient)
+                    {
+                        factureClient.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.FactureFile);
+
+                        factureClient.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureClient/{3}", Request.Scheme, Request.Host, Request.PathBase, factureClient.PayementFile);
+                    }
+
+                }
+            }
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder == "oui")
+                {
+                    queryable = queryable.Where(s => s.FactureClient.Count != 0)
+              .AsQueryable();
+
+
+                }
+                if (sortOrder == "non")
+                {
+                    queryable = queryable.Where(s => s.FactureClient.Count == 0)
+               .AsQueryable();
+                }
+            }
+            if (!string.IsNullOrEmpty(date))
+            {
+                queryable = queryable.Where(s => (s.Date).ToString().Contains(date));
+            }
+
+            if (!string.IsNullOrEmpty(name))
+            {
+
+                queryable = queryable.Where(s => s.IdclientNavigation.IduserNavigation.Nom.Contains(name) || s.IdclientNavigation.IduserNavigation.Prenom.Contains(name))
+                .AsQueryable();
+
+
+            }
+            if (!string.IsNullOrEmpty(num))
+            {
+
+                queryable = queryable.Where(s => s.IdDemande.ToString().Contains(num))
+                .AsQueryable();
+
+
             }
 
             // queryable = queryable.OrderBy(s => s.FactureClient.Count);
@@ -113,6 +152,7 @@ namespace BackPfe.Controllers
             //**********************************************
 
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraison(int id)
         {

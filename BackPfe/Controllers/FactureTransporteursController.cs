@@ -25,18 +25,19 @@ namespace BackPfe.Controllers
             _hostEnvironment = hosting;
         }
 
-        // GET: api/FactureTransporteurs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FactureTransporteur>>> GetFactureTransporteur([FromQuery] Paginations pagination, [FromQuery] string sortOrder)
+        public async Task<ActionResult<IEnumerable<FactureTransporteur>>> GetFactureTransporteur([FromQuery] Paginations pagination, [FromQuery] string num, [FromQuery] string sortOrder)
         {
-            var queryable =  _context.FactureTransporteur
-                .Include(el=>el.IdOffreNavigation)
-                .ThenInclude(el=>el.IdDemandeNavigation)
+            var queryable = _context.FactureTransporteur
                 .Include(el => el.IdOffreNavigation)
-                .ThenInclude(el=>el.IdTransporteurNavigation)
-                .ThenInclude(el=>el.IdUserNavigation).AsQueryable();
+                .ThenInclude(el => el.IdDemandeNavigation)
+                .Include(el => el.IdOffreNavigation)
+                .ThenInclude(el => el.IdTransporteurNavigation)
+                .ThenInclude(el => el.IdUserNavigation).AsQueryable();
             foreach (FactureTransporteur facture in queryable)
             {
+                facture.SrcPayementFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureTransporteur/{3}", Request.Scheme, Request.Host, Request.PathBase, facture.PayementFile);
+                facture.SrcFactureFile = String.Format("{0}://{1}{2}/File/IntermediaireFile/factureTransporteur/{3}", Request.Scheme, Request.Host, Request.PathBase, facture.FactureFile);
                 facture.IdOffreNavigation.IdTransporteurNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, facture.IdOffreNavigation.IdTransporteurNavigation.IdUserNavigation.Image);
             }
             if (!string.IsNullOrEmpty(sortOrder))
@@ -49,21 +50,29 @@ namespace BackPfe.Controllers
                 {
                     queryable = queryable.Where(s => s.PayementFile == null);
                 }
-                if (sortOrder != "non" && sortOrder != "oui" && sortOrder != "0" )
+                if (sortOrder != "non" && sortOrder != "oui" && sortOrder != "0")
                 {
                     queryable = queryable.Where(s => s.IdOffreNavigation.IdTransporteurNavigation.IdUserNavigation.Nom.Contains(sortOrder) ||
                s.IdOffreNavigation.IdTransporteurNavigation.IdUserNavigation.Prenom.Contains(sortOrder));
 
                 }
             }
+            if (!string.IsNullOrEmpty(num))
+            {
+
+                queryable = queryable.Where(s => s.IdFactTransporteur.ToString().Contains(num));
+
+
+            }
             queryable = queryable.OrderBy(s => s.PayementFile);
+
             //ajout nombre de page
             await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
             //element par page
             List<FactureTransporteur> factureTransporteurs = await queryable.Paginate(pagination).ToListAsync();
 
             return factureTransporteurs;
-           // return queryable;
+            // return queryable;
         }
 
         // GET: api/FactureTransporteurs/5

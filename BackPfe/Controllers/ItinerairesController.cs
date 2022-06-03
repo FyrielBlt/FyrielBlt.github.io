@@ -23,9 +23,32 @@ namespace BackPfe.Controllers
 
         // GET: api/Itineraires
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Itineraire>>> GetItineraire()
+        public async Task<ActionResult<IEnumerable<Itineraire>>> GetItineraire([FromQuery] Paginations pagination, [FromQuery] string ville1, [FromQuery] string name)
         {
-            return await _context.Itineraire.ToListAsync();
+            var queryable = _context.Itineraire
+
+            .Include(t => t.IdTransporteurNavigation).ThenInclude(t => t.IdUserNavigation)
+            .Include(t => t.IdVilleNavigation)
+
+            .AsQueryable();
+            foreach (Itineraire demande in queryable)
+            {
+                demande.IdTransporteurNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, demande.IdTransporteurNavigation.IdUserNavigation.Image);
+            }
+            if (!string.IsNullOrEmpty(ville1))
+            {
+                queryable = queryable.Where(s => s.IdVilleNavigation.NomVille.Contains(ville1));
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                queryable = queryable.Where(s => s.IdTransporteurNavigation.IdUserNavigation.Nom.Contains(name) || s.IdTransporteurNavigation.IdUserNavigation.Prenom.Contains(name));
+            }
+            // return await _context.Itineraire.ToListAsync();
+            await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPage);
+            //element par page
+            List<Itineraire> demandeLivraisons = await queryable.Paginate(pagination).ToListAsync();
+
+            return demandeLivraisons;
         }
 
         // GET: api/Itineraires/5
