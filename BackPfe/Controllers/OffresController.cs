@@ -160,7 +160,13 @@ namespace BackPfe.Controllers
             var offre =  _context.Offre.Where(t=>t.IdDemandeNavigation.IdclientNavigation.Iduser==id)
                 .Where(t => t.PrixFinale!=null)
                 .OrderByDescending(t=>t.PrixFinale)
-                .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.IdclientNavigation).ThenInclude(t=>t.IduserNavigation).Include(t => t.IdEtatNavigation).Include(t => t.IdTransporteurNavigation).ThenInclude(t=>t.IdUserNavigation).AsQueryable();
+                .Include(t=>t.IdDemandeNavigation)
+                .ThenInclude(t=>t.IdclientNavigation)
+                .ThenInclude(t=>t.IduserNavigation)
+                .Include(t => t.IdEtatNavigation)
+                .Include(t => t.IdTransporteurNavigation)
+                .ThenInclude(t=>t.IdUserNavigation).Include(t=>t.FileOffre)
+                .AsQueryable();
             if (!string.IsNullOrEmpty(depart))
             {
                 offre =offre.Where(t=>t.IdDemandeNavigation.Adressdepart.Contains(depart));    
@@ -176,6 +182,13 @@ namespace BackPfe.Controllers
 
             await HttpContext.InsertPaginationParameterInResponse(offre, pagination.QuantityPage);
             List<Offre> offres = await offre.Paginate(pagination).OrderByDescending(t => t.IdOffre).ToListAsync();
+            foreach (Offre o in offres)
+            {
+                foreach (FileOffre f in o.FileOffre)
+                {
+                    f.SrcOffreFile = String.Format("{0}://{1}{2}/File/TransporteurFiles/OffreFiles/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+                }
+            }
             if (offre == null)
             {
                 return NotFound();
