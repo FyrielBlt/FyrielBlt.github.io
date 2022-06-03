@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace BackPfe.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -43,11 +42,16 @@ namespace BackPfe.Controllers
             string type = Type(validUser);
             if (validUser != null)
             {
+                if (validUser.Active != 1)
+                {
+                    return Unauthorized("Le compte n'a pas encore activé");
+                }else
                 tokenString = BuildJWTToken();
             }
+          
             else
             {
-                return Unauthorized();
+                return Unauthorized("Email ou mot de passe invalide");
             }
             return Ok(new { Token = tokenString, validUser, Type = type });
         }
@@ -101,11 +105,11 @@ namespace BackPfe.Controllers
                /* var client = _context.Users.Include(el=>el.Client).Where(el => el.IdUser == users.IdUser);
                 var transporteur = _context.Transporteur.Where(el => el.IdUser == users.IdUser);
                 var intermediaire = _context.Intermediaire.Where(el => el.IdUser == users.IdUser);*/
-                if(users.Client.Count!= 0 && users.Transporteur.Count == 0 && users.Intermediaire.Count == 0)
+                if(users.Client.Count!= 0 && users.Transporteur.Count == 0 && users.Intermediaire.Count == 0 && users.Active==1)
                 {
                     return "client";
                 }
-                else if (users.Client.Count == 0 && users.Transporteur.Count != 0 && users.Intermediaire.Count == 0)
+                else if (users.Client.Count == 0 && users.Transporteur.Count != 0 && users.Intermediaire.Count == 0 && users.Active == 1)
                 {
                     return "transporteur";
                 }

@@ -14,7 +14,7 @@ namespace BackPfe.Models
         public int IdFactClient { get; set; }
         public int IdDemandeLivraison { get; set; }
         public string FactureFile { get; set; }
-        public string EtatDacture { get; set; }
+        public string EtatFacture { get; set; }
 
         public string PayementFile { get; set; }
         public int? Notification { get; set; }

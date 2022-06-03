@@ -92,6 +92,7 @@ namespace BackPfe.Controllers
 
                 .OrderBy(s => s.DateEnvoit)
                 .AsQueryable();
+
             if (!string.IsNullOrEmpty(search))
             {
                 demandeDevis = demandeDevis.Where(s=>
@@ -131,7 +132,13 @@ namespace BackPfe.Controllers
             await HttpContext.InsertPaginationParameterInResponse(demandeDevis, pagination.QuantityPage);
             //element par page
             List<DemandeDevis> demandes = await demandeDevis.Paginate(pagination).ToListAsync();
-
+            foreach (DemandeDevis d in demandes)
+            {
+                foreach (FileDemandeLivraison f in d.IdDemandeNavigation.FileDemandeLivraison)
+                {
+                    f.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+                }
+            }
             if (demandeDevis == null)
             {
                 return NotFound();
