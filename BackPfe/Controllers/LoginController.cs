@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace BackPfe.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -73,7 +72,7 @@ namespace BackPfe.Controllers
             List<Users> users = _context.Users.ToList();
             foreach (Users user in users)
             {
-                if ((user.Email == login.Email) && (user.Motdepasse == login.Motdepasse))
+                if ((user.Email == login.Email) && (user.Motdepasse == login.Motdepasse) &&(user.Active==1))
                 {
                     validUser = user;
                     validUser.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, validUser.Image);
@@ -101,11 +100,11 @@ namespace BackPfe.Controllers
                /* var client = _context.Users.Include(el=>el.Client).Where(el => el.IdUser == users.IdUser);
                 var transporteur = _context.Transporteur.Where(el => el.IdUser == users.IdUser);
                 var intermediaire = _context.Intermediaire.Where(el => el.IdUser == users.IdUser);*/
-                if(users.Client.Count!= 0 && users.Transporteur.Count == 0 && users.Intermediaire.Count == 0)
+                if(users.Client.Count!= 0 && users.Transporteur.Count == 0 && users.Intermediaire.Count == 0 && users.Active==1)
                 {
                     return "client";
                 }
-                else if (users.Client.Count == 0 && users.Transporteur.Count != 0 && users.Intermediaire.Count == 0)
+                else if (users.Client.Count == 0 && users.Transporteur.Count != 0 && users.Intermediaire.Count == 0 && users.Active == 1)
                 {
                     return "transporteur";
                 }

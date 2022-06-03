@@ -86,6 +86,10 @@ namespace BackPfe.Controllers
                 );
             }
 
+
+
+
+
             if (!string.IsNullOrEmpty(depart))
             {
                 offre = offre.Where(s =>
@@ -258,7 +262,7 @@ namespace BackPfe.Controllers
         {
             _context.Offre.Add(offre);
             await _context.SaveChangesAsync();
-            using (MailMessage mail = new MailMessage())
+          /*  using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress("beltaiefferiel98@gmail.com");
                 mail.To.Add("malekbouzayani9@gmail.com");
@@ -275,7 +279,7 @@ namespace BackPfe.Controllers
                     stmp.Send(mail);
                 }
 
-            }
+            }*/
             return CreatedAtAction("GetOffre", new { id = offre.IdOffre,
             }, offre);
         }

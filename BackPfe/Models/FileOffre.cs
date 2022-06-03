@@ -16,9 +16,9 @@ namespace BackPfe.Models
         public int IdOffre { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
-
         [NotMapped]
         public string SrcOffreFile { get; set; }
+       
         public virtual Offre IdOffreNavigation { get; set; }
     }
 }

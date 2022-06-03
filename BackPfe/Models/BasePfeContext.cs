@@ -203,7 +203,7 @@ namespace BackPfe.Models
             {
                 entity.HasKey(e => e.IdFactClient);
 
-                entity.Property(e => e.EtatDacture)
+                entity.Property(e => e.EtatFacture)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -379,22 +379,18 @@ namespace BackPfe.Models
                 entity.HasKey(e => e.IdSociete);
 
                 entity.Property(e => e.Adress)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Description)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                   
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nom)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -454,7 +450,6 @@ namespace BackPfe.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                   
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

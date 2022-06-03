@@ -24,15 +24,14 @@ namespace BackPfe.Models
         public string Prenom { get; set; }
         public string Email { get; set; }
         public string Motdepasse { get; set; }
-        public string Image { get; set; }
         public int? Societe { get; set; }
         public string Tel { get; set; }
+        public string Image { get; set; }
+        public int? Active { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
         [NotMapped]
         public string ImageSrc { get; set; }
-
-
         public virtual Societe SocieteNavigation { get; set; }
         public virtual ICollection<Chauffeur> Chauffeur { get; set; }
         public virtual ICollection<Client> Client { get; set; }

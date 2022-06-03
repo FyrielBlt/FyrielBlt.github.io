@@ -145,8 +145,10 @@ namespace BackPfe.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSociete", new { id = societe.IdSociete }, societe);*/
-
-            societe.Image = UploadFile.UploadImage(societe.ImageFile, _hostEnvironment, "File/TransporteurFiles/ImageSociete");
+            if (societe.ImageFile!= null)
+            {
+                societe.Image = UploadFile.UploadImage(societe.ImageFile, _hostEnvironment, "File/TransporteurFiles/ImageSociete");
+            }
             _context.Societe.Add(societe);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetSociete", new
@@ -158,6 +160,7 @@ namespace BackPfe.Controllers
                 Adress = societe.Adress,
                 ImageSrc = String.Format("{0}://{1}{2}/File/TransporteurFiles/ImageSociete/{3}", Request.Scheme, Request.Host, Request.PathBase, societe.Image)
             });
+
 
 
         }
