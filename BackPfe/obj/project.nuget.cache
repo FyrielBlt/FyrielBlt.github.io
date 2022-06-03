@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "v5qz3kTebnKLfZSzK3m8BocehLTEP9XHZmROvb1piMs6ktCnKxU+cn0R2H7IRCpdWRj68olXaKPo4ROdsIdkPA==",
+  "dgSpecHash": "V2qEamJSIlXpaHbQi/7J1qTzvZJeR8AKWuHEs1Q4Xggx1YWGHhzezdHZDMfhjLkP5i0lKo0W24Y985gPVKsCOg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Desktop\\backfinal\\backpfe\\BackPfe.csproj",
+  "projectFilePath": "C:\\Users\\user\\Desktop\\backfinal\\BackPfe\\BackPfe.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\fluentemail.core\\3.0.2\\fluentemail.core.3.0.2.nupkg.sha512",

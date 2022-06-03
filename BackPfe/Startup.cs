@@ -41,7 +41,7 @@ namespace BackPfe
             services.AddMvc(option => option.EnableEndpointRouting = false)
                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.WithOrigins("http://localhost:8080")
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.WithOrigins("http://localhost:8080", "http://localhost:8100")
             .AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("x-wp-total").AllowCredentials().Build()));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
