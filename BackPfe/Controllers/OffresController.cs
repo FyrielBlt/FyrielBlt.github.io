@@ -22,12 +22,11 @@ namespace BackPfe.Controllers
             _context = context;
         }
 
-        // GET: api/Offres
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Offre>>> GetOffre()
         {
-            return await _context.Offre.
-                                Include(t => t.IdDemandeNavigation).ThenInclude(t=>t.DemandeDevis).
+            return await _context.Offre.Include(t => t.FileOffre).
+                                Include(t => t.IdDemandeNavigation).ThenInclude(t => t.DemandeDevis).
 
                 ToListAsync();
         }
@@ -50,7 +49,38 @@ namespace BackPfe.Controllers
                 return offre;
             
         }
-        
+        // GET: api/Offres/5
+        [HttpGet("details/{id}")]
+        public async Task<ActionResult<Offre>> GetOffreDetails(int id)
+        {
+
+            var offre = await _context.Offre.Where(t => t.IdDemandeNavigation.IdDemande == id)
+                .Include(t => t.IdDemandeNavigation).ThenInclude(t=>t.IdEtatdemandeNavigation)
+                .Include(t => t.IdDemandeNavigation).ThenInclude(t => t.FileDemandeLivraison)
+                .Include(t => t.IdEtatNavigation)
+                .Include(t => t.IdTransporteurNavigation).ThenInclude(t => t.IdUserNavigation)
+                .Include(t=>t.FileOffre)
+                .FirstAsync();
+
+
+            if (offre == null)
+            {
+                return NotFound();
+            }
+
+            offre.IdTransporteurNavigation.IdUserNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
+                    Request.PathBase, offre.IdTransporteurNavigation.IdUserNavigation.Image);
+            foreach (FileOffre f in offre.FileOffre)
+            {
+                f.SrcOffreFile = String.Format("{0}://{1}{2}/File/TransporteurFiles/OffreFiles/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+            }
+            foreach (FileDemandeLivraison f in offre.IdDemandeNavigation.FileDemandeLivraison)
+            {
+                f.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+            }
+            return offre;
+        }
+
         [HttpGet("{id}/offrestransporteur")]
         public async Task<ActionResult<IEnumerable<Offre>>> GetOffrebyidtransporteur(
              [FromQuery] Paginations pagination,

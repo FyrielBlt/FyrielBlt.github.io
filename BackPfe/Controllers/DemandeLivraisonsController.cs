@@ -159,11 +159,25 @@ namespace BackPfe.Controllers
             var demandeLivraison = await _context.DemandeLivraison.Where(el => el.IdDemande == id)
                 .Include(el => el.IdclientNavigation).ThenInclude(el => el.IduserNavigation)
                 .Include(el => el.Offre).ThenInclude(el => el.IdEtatNavigation)
+                .Include(el => el.Offre).ThenInclude(el => el.FileOffre)
                 .Include(el => el.IdEtatdemandeNavigation)
+                .Include(el => el.FileDemandeLivraison)
                 .Include(el => el.Offre).ThenInclude(el => el.IdTransporteurNavigation).ThenInclude(el => el.IdUserNavigation).ToListAsync();
             foreach (DemandeLivraison demande in demandeLivraison)
             {
                 demande.IdclientNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, demande.IdclientNavigation.IduserNavigation.Image);
+            }
+            foreach (FileDemandeLivraison file in demandeLivraison[0].FileDemandeLivraison)
+            {
+                file.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, file.NomFile);
+            }
+            foreach (Offre offre in demandeLivraison[0].Offre)
+            {
+                foreach (FileOffre file in offre.FileOffre)
+                {
+                    file.SrcOffreFile = String.Format("{0}://{1}{2}/File/TransporteurFiles/OffreFiles/{3}", Request.Scheme, Request.Host, Request.PathBase, file.NomFile);
+                }
+                //file.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, file.NomFile);
             }
             if (demandeLivraison == null)
             {
@@ -172,6 +186,16 @@ namespace BackPfe.Controllers
 
             return demandeLivraison;
         }
+
+
+
+        [HttpGet("demandeall")]
+        public async Task<ActionResult<IEnumerable<DemandeLivraison>>> GetDemandeLivraisons()
+        {
+            return await _context.DemandeLivraison.ToListAsync();
+        }
+
+
 
         // GET: api/DemandeLivraisons/5
         [HttpGet("client/{id}")]
