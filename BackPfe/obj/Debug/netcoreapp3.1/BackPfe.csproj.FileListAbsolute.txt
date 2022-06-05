@@ -502,3 +502,7 @@ C:\Users\Karim Omrane\Desktop\PFE FI\Backend\backpfe\obj\Debug\netcoreapp3.1\Bac
 C:\Users\Karim Omrane\Desktop\PFE FI\Backend\backpfe\obj\Debug\netcoreapp3.1\BackPfe.dll
 C:\Users\Karim Omrane\Desktop\PFE FI\Backend\backpfe\obj\Debug\netcoreapp3.1\BackPfe.pdb
 C:\Users\Karim Omrane\Desktop\PFE FI\Backend\backpfe\obj\Debug\netcoreapp3.1\BackPfe.genruntimeconfig.cache
+C:\Users\Karim Omrane\Desktop\PFE FI\Backend\BackPfe\bin\Debug\netcoreapp3.1\Microsoft.Extensions.PlatformAbstractions.dll
+C:\Users\Karim Omrane\Desktop\PFE FI\Backend\BackPfe\bin\Debug\netcoreapp3.1\Twilio.dll
+C:\Users\Karim Omrane\Desktop\PFE FI\Backend\BackPfe\bin\Debug\netcoreapp3.1\Twilio.AspNet.Common.dll
+C:\Users\Karim Omrane\Desktop\PFE FI\Backend\BackPfe\bin\Debug\netcoreapp3.1\Twilio.AspNet.Core.dll

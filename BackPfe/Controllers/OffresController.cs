@@ -8,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BackPfe.Models;
 using BackPfe.Paginate;
 using System.Net.Mail;
-
+using Twilio;
+using Twilio.Types;
+using Twilio.Rest.Api.V2010.Account;
 namespace BackPfe.Controllers
 {
     [Route("api/[controller]")]
@@ -262,6 +264,7 @@ namespace BackPfe.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOffre(int id, Offre offre)
         {
+
             if (id != offre.IdOffre)
             {
                 return BadRequest();
@@ -285,22 +288,35 @@ namespace BackPfe.Controllers
                 }
             }
             {
-               /* using (MailMessage mail = new MailMessage())
-                {
-                    mail.From = new MailAddress("beltaiefferiel98@gmail.com");
-                    mail.To.Add("ferielcontact.email@gmail.com");
-                    mail.Subject = "Une modification sur l'offre";
-                    mail.Body = "Bonjour , une offre a été envoyer, Notez bien si vous ne répondrez pas dans le bien délai " +
-                        "l'offre sera réjuter ";
-                    mail.IsBodyHtml = true;
-                    using (SmtpClient stmp = new SmtpClient("smtp.mailtrap.io", 2525))
-                    {
-                        stmp.Credentials = new System.Net.NetworkCredential("9fd3fb2f9c2ff4", "39a7a0d5ed76fd");
-                        stmp.EnableSsl = true;
-                        stmp.Send(mail);
-                    }
+                var accountSid = "AC31e51268bbd5569250e5f5681a4779e2";
+                var authToken = "110ee2c78dda43a6c1d160d75af15354";
 
-                }*/
+                TwilioClient.Init(accountSid, authToken);
+
+                var message = MessageResource.Create(
+                    body: "Bonjour , une offre a été envoyer, Notez bien si vous ne répondrez pas dans le bien délai " +
+                         "l'offre sera rejeter",
+                    from: new Twilio.Types.PhoneNumber("+19894873673"),
+                    to: new Twilio.Types.PhoneNumber("+21620969466")
+                );
+                
+
+                /* using (MailMessage mail = new MailMessage())
+                 {
+                     mail.From = new MailAddress("beltaiefferiel98@gmail.com");
+                     mail.To.Add("ferielcontact.email@gmail.com");
+                     mail.Subject = "Une modification sur l'offre";
+                     mail.Body = "Bonjour , une offre a été envoyer, Notez bien si vous ne répondrez pas dans le bien délai " +
+                         "l'offre sera réjuter ";
+                     mail.IsBodyHtml = true;
+                     using (SmtpClient stmp = new SmtpClient("smtp.mailtrap.io", 2525))
+                     {
+                         stmp.Credentials = new System.Net.NetworkCredential("9fd3fb2f9c2ff4", "39a7a0d5ed76fd");
+                         stmp.EnableSsl = true;
+                         stmp.Send(mail);
+                     }
+
+                 }*/
 
             }
 

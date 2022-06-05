@@ -11,6 +11,7 @@ using System;
 using System.Reflection;
 
 [assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("TourmalineCore.AspNetCore.JwtAuthentication.Core")]
+[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Twilio.AspNet.Core")]
 
 // Généré par la classe MSBuild WriteCodeFragment.
 

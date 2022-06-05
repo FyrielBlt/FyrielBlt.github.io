@@ -139,7 +139,7 @@ namespace BackPfe.Controllers
                 "File/IntermediaireFile/factureTransporteur/");
                  _context.FactureTransporteur.Add(factureTransporteur);
                  await _context.SaveChangesAsync();
-            if (factureTransporteur.PayementFile ==null)
+          /*  if (factureTransporteur.PayementFile ==null)
             {
                 using (MailMessage mail = new MailMessage())
                 {
@@ -158,8 +158,8 @@ namespace BackPfe.Controllers
                         stmp.Send(mail);
                     }
 
-                }
-            }
+                
+            }*/
             return CreatedAtAction("GetFactureTransporteur", new
             {
                 IdFactTransporteur =factureTransporteur.IdFactTransporteur,
