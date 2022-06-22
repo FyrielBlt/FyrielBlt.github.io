@@ -333,7 +333,7 @@ namespace BackPfe.Controllers
             await _context.SaveChangesAsync();
            using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("feriel@gmail.com");
+                mail.From = new MailAddress("Karimomrane7@gmail.com");
                 mail.To.Add("Easy_Order@gmail.com");
                 mail.Subject = "Nouvelle Offre";
                 mail.IsBodyHtml = true;
@@ -349,6 +349,18 @@ namespace BackPfe.Controllers
                 }
 
             }
+            var accountSid = "AC921a49972bd69488762dd93ce0474cd2";
+            var authToken = "de519647c1a2a2e907e03947b1873c29";
+
+            TwilioClient.Init(accountSid, authToken);
+
+            var message = MessageResource.Create(
+                body: "Bonjour , une offre a été envoyer, Notez bien si vous ne répondrez pas dans le bien délai " +
+                     "l'offre sera rejeter",
+                from: new Twilio.Types.PhoneNumber("+14703090378"),
+                to: new Twilio.Types.PhoneNumber("+21621433145")
+            );
+
             return CreatedAtAction("GetOffre", new { id = offre.IdOffre,
             }, offre);
         }

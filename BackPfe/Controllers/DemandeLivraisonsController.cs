@@ -47,10 +47,7 @@ namespace BackPfe.Controllers
             }
 
 
-            foreach (DemandeLivraison demande in queryable)
-            {
-                demande.IdclientNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, demande.IdclientNavigation.IduserNavigation.Image);
-            }
+          
 
 
             if (filter != 0 && filter1 != 0)
@@ -133,6 +130,10 @@ namespace BackPfe.Controllers
                 .AsQueryable();
 
 
+            }
+            foreach (DemandeLivraison demande in queryable)
+            {
+                demande.IdclientNavigation.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, demande.IdclientNavigation.IduserNavigation.Image);
             }
 
             // queryable = queryable.OrderBy(s => s.FactureClient.Count);

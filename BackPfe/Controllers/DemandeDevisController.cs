@@ -61,7 +61,7 @@ namespace BackPfe.Controllers
         {
             return _context.DemandeDevis.Where(el => el.IdDemande == id).Include(t => t.IdIntermediaireNavigation)
                                             .Include(t => t.IdTransporteurNavigation)
-                                            .ToList(); ;
+                                            .ToList();
 
             /*if (demandeDevis == null)
             {
@@ -69,6 +69,26 @@ namespace BackPfe.Controllers
             }
 
             return "rrr";*/
+        }
+        [HttpGet("transporteur/{id}")]
+        public async Task<ActionResult<DemandeDevis>> GetDemandeDevi(int id)
+        {
+            DemandeDevis demande = _context.DemandeDevis.Where(el => el.IdDemandeDevis == id).Include(t => t.IdIntermediaireNavigation)
+                                            .Include(t => t.IdTransporteurNavigation)
+                                            .Include(t=>t.IdDemandeNavigation).ThenInclude(t=>t.FileDemandeLivraison)
+                                            .Include(t=>t.IdEtatNavigation)
+                                            .First();
+
+            if (demande == null)
+            {
+                return NotFound();
+            }
+            foreach (FileDemandeLivraison f in demande.IdDemandeNavigation.FileDemandeLivraison)
+            {
+                f.SrcFile = String.Format("{0}://{1}{2}/File/Client/DemandeLivraison/{3}", Request.Scheme, Request.Host, Request.PathBase, f.NomFile);
+            }
+
+            return demande;
         }
         // les demande devise de ce transporteur qui sont non traité
         [HttpGet("{id}/transporteur")]

@@ -57,7 +57,11 @@ namespace BackPfe.Controllers
             {
                 return NotFound();
             }
-
+            foreach (Users user in users)
+            {
+                user.ImageSrc = String.Format("{0}://{1}{2}/File/Image/{3}", Request.Scheme, Request.Host,
+               Request.PathBase, user.Image);
+            }
             return users;
         }
         [HttpPut("active/{id}")]
@@ -122,7 +126,11 @@ namespace BackPfe.Controllers
                 }
                 else
                 {
-                    UploadFile.DeleteImage(user.Image, _hostEnvironment, "File/Image");
+                    if (user.Image!=null)
+                    {
+                        UploadFile.DeleteImage(user.Image, _hostEnvironment, "File/Image");
+                    }
+                    
                     user.Image = UploadFile.UploadImage(users.ImageFile, _hostEnvironment, "File/Image");
                     user.Nom = users.Nom;
                     user.Prenom = users.Prenom;
@@ -165,7 +173,7 @@ namespace BackPfe.Controllers
             else
             {
               
-                return NotFound("Email doit etre unique");
+                return BadRequest();
             }
 
 

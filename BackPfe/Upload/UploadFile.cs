@@ -23,7 +23,7 @@ namespace BackPfe.Upload
 
             return imageName;
         }
-        public static List<string> UploadImages( List<IFormFile> imageFiles, IWebHostEnvironment _hostEnvironment, string NomDossier)
+        /*public static List<string> UploadImages( List<IFormFile> imageFiles, IWebHostEnvironment _hostEnvironment, string NomDossier)
         {
              List<string> imagesNames = new List<string>();
              foreach(IFormFile imageFile in imageFiles)
@@ -40,7 +40,7 @@ namespace BackPfe.Upload
             }
             return imagesNames;
 
-        }
+        }*/
 
         public static void DeleteImage(string imageName, IWebHostEnvironment _hostEnvironment, string NomDossier)
         {
